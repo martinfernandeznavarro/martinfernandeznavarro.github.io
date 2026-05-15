@@ -2,328 +2,333 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Martín Fernández Navarro</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box;user-select:none;}
-body{width:100vw;height:100vh;overflow:hidden;background:#04090f;font-family:'Share Tech Mono',monospace;cursor:default;}
+/* ════════════════════════════════════════════
+   SHARED
+════════════════════════════════════════════ */
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{width:100vw;height:100vh;overflow:hidden;background:#04090f;font-family:'Share Tech Mono',monospace;}
 
-/* ── DESKTOP ── */
-#desktop{
-  position:relative;width:100%;height:calc(100% - 38px);
-  background:#0a1a28;
-  overflow:hidden;
-}
-/* wallpaper SVG base layer */
-#wp-base{position:absolute;inset:0;width:100%;height:100%;z-index:0;display:block;}
+/* ════════════════════════════════════════════
+   DESKTOP (>680px)
+════════════════════════════════════════════ */
+@media(min-width:681px){
+  #mobile-ui{display:none!important;}
+  body{cursor:default;user-select:none;}
 
-/* scanlines — on top of everything, monitor feel */
-#desktop::before{
-  content:'';position:absolute;inset:0;pointer-events:none;z-index:3;
-  background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.04) 3px,rgba(0,0,0,0.04) 4px);
-}
+  #desktop{position:relative;width:100%;height:calc(100% - 38px);background:#0a1a28;overflow:hidden;}
+  #wp-base{position:absolute;inset:0;width:100%;height:100%;z-index:0;display:block;object-fit:cover;}
+  #desktop::before{content:'';position:absolute;inset:0;pointer-events:none;z-index:3;
+    background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.04) 3px,rgba(0,0,0,.04) 4px);}
+  #wp-ov{position:absolute;inset:0;z-index:1;opacity:0;pointer-events:none;transition:opacity .65s ease;}
+  #wp-ov.vis{opacity:1;}
+  #hp{position:absolute;z-index:45;pointer-events:none;opacity:0;transform:scale(.93) translateY(6px);
+    transition:opacity .22s ease,transform .22s ease;border:1px solid rgba(255,255,255,.09);
+    box-shadow:0 10px 36px rgba(0,0,0,.65);overflow:hidden;}
+  #hp.vis{opacity:1;transform:scale(1) translateY(0);}
+  #hp::before{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;
+    background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.05) 3px,rgba(0,0,0,.05) 4px);}
+  .hp-footer{position:absolute;bottom:0;left:0;right:0;z-index:3;padding:7px 10px 6px;
+    background:linear-gradient(0deg,rgba(0,0,0,.75) 0%,transparent 100%);}
+  .hp-fname{font-size:9px;color:rgba(230,240,235,.7);letter-spacing:.4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .hp-ftype{font-size:7.5px;color:rgba(150,200,175,.4);letter-spacing:1px;margin-top:2px;text-transform:uppercase;}
 
-/* ── WALLPAPER OVERLAY ── */
-#wp-ov{
-  position:absolute;inset:0;z-index:1;
-  opacity:0;pointer-events:none;
-  transition:opacity .65s ease;
-}
-#wp-ov.vis{opacity:1;}
+  #icons{position:absolute;top:14px;left:14px;display:flex;flex-direction:column;gap:4px;z-index:10;}
+  #papelera-wrap{position:absolute;bottom:52px;right:18px;z-index:10;}
+  .dicon{display:flex;flex-direction:column;align-items:center;width:72px;padding:6px 4px 4px;
+    border-radius:3px;cursor:pointer;position:relative;transition:background .15s;}
+  .dicon:hover{background:rgba(255,255,255,.07);}
+  .dicon.pulse{background:rgba(100,200,140,.08);}
+  .dicon-fig{width:46px;height:40px;position:relative;flex-shrink:0;}
+  .folder-body{position:absolute;bottom:0;left:0;width:46px;height:32px;border-radius:0 2px 2px 2px;}
+  .folder-tab{position:absolute;top:0;left:0;width:20px;height:8px;border-radius:2px 2px 0 0;}
+  .dicon-em{position:absolute;bottom:3px;right:2px;font-size:14px;line-height:1;}
+  .dicon-label{margin-top:3px;font-size:9px;text-align:center;color:rgba(210,230,220,.8);
+    text-shadow:0 1px 4px rgba(0,0,0,.95);line-height:1.25;word-break:break-word;max-width:70px;}
+  .ring-svg{position:absolute;top:-3px;left:-3px;width:52px;height:46px;pointer-events:none;opacity:0;transition:opacity .3s;}
+  .dicon:hover .ring-svg{opacity:1;}
+  .ring-svg circle{fill:none;stroke:rgba(80,200,130,.5);stroke-width:1.5;stroke-dasharray:138;stroke-dashoffset:138;}
+  .dicon.counting .ring-svg circle{stroke-dashoffset:0;transition:stroke-dashoffset 30s linear;}
 
-/* ── HOVER PREVIEW ── */
-#hp{
-  position:absolute;z-index:45;pointer-events:none;
-  opacity:0;transform:scale(.93) translateY(6px);
-  transition:opacity .22s ease, transform .22s ease;
-  border:1px solid rgba(255,255,255,.09);
-  box-shadow:0 10px 36px rgba(0,0,0,.65), 0 0 0 1px rgba(0,0,0,.3);
-  overflow:hidden;
-}
-#hp.vis{opacity:1;transform:scale(1) translateY(0);}
+  .win{position:absolute;background:rgba(9,14,20,.97);border:1px solid rgba(60,110,80,.28);
+    border-radius:2px;display:flex;flex-direction:column;
+    box-shadow:0 12px 40px rgba(0,0,0,.7);min-width:320px;min-height:180px;}
+  .win.hidden{display:none;}
+  .win.maxed{top:0!important;left:0!important;width:100%!important;height:100%!important;}
+  .win-bar{display:flex;align-items:center;height:28px;padding:0 8px;gap:7px;
+    background:rgba(12,18,26,.99);border-bottom:1px solid rgba(60,110,80,.2);
+    border-radius:2px 2px 0 0;cursor:grab;flex-shrink:0;}
+  .win-bar:active{cursor:grabbing;}
+  .wbtn{width:11px;height:11px;border-radius:50%;border:none;cursor:pointer;flex-shrink:0;}
+  .wbtn.cl{background:#8b2c2c;}.wbtn.mn{background:#6a5c00;}.wbtn.mx{background:#1a5a30;}
+  .wbtn.cl:hover{background:#c0392b;}.wbtn.mn:hover{background:#d4ac00;}.wbtn.mx:hover{background:#27ae60;}
+  .win-title{font-size:10px;color:rgba(180,210,195,.55);letter-spacing:.6px;flex:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+  .win-tabs{display:flex;border-bottom:1px solid rgba(60,110,80,.2);background:rgba(10,16,14,.99);flex-shrink:0;}
+  .win-tab{padding:6px 14px;font-size:9px;color:rgba(130,180,158,.45);cursor:pointer;border:none;background:transparent;border-bottom:2px solid transparent;letter-spacing:.8px;transition:color .15s,border-color .15s;}
+  .win-tab:hover{color:rgba(155,205,180,.68);}
+  .win-tab.on{color:rgba(180,230,205,.88);border-bottom-color:rgba(60,180,100,.5);}
+  .win-body{flex:1;overflow-y:auto;overflow-x:hidden;padding:18px 20px;scrollbar-width:thin;scrollbar-color:rgba(60,110,80,.25) transparent;}
+  .win-body::-webkit-scrollbar{width:3px;}
+  .win-body::-webkit-scrollbar-thumb{background:rgba(60,110,80,.25);border-radius:2px;}
+  .rh{position:absolute;bottom:0;right:0;width:12px;height:12px;cursor:se-resize;opacity:.25;}
+  .rh::after{content:'◢';font-size:10px;color:rgba(80,160,110,.6);position:absolute;bottom:1px;right:1px;}
+  .photo-win{min-width:unset!important;min-height:unset!important;animation:phIn .24s ease;}
+  @keyframes phIn{from{opacity:0;transform:scale(.91) translateY(8px)}to{opacity:1;transform:none}}
+  .photo-win .win-bar{height:22px;padding:0 5px;}
+  .photo-body{flex:1;position:relative;overflow:hidden;}
+  .photo-body::before{content:'';position:absolute;inset:0;pointer-events:none;z-index:1;
+    background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.032) 3px,rgba(0,0,0,.032) 4px);}
+  .ph-idx{position:absolute;bottom:6px;right:8px;z-index:2;font-size:8px;color:rgba(255,255,255,.22);letter-spacing:.6px;}
 
-/* scanline texture on preview */
-#hp::before{
-  content:'';position:absolute;inset:0;z-index:2;pointer-events:none;
-  background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.05) 3px,rgba(0,0,0,.05) 4px);
-}
-
-.hp-footer{
-  position:absolute;bottom:0;left:0;right:0;z-index:3;
-  padding:7px 10px 6px;
-  background:linear-gradient(0deg,rgba(0,0,0,.75) 0%,rgba(0,0,0,.4) 70%,transparent 100%);
-}
-.hp-fname{
-  font-family:'Share Tech Mono',monospace;font-size:9px;
-  color:rgba(230,240,235,.7);letter-spacing:.4px;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-}
-.hp-ftype{
-  font-family:'Share Tech Mono',monospace;font-size:7.5px;
-  color:rgba(150,200,175,.4);letter-spacing:1px;margin-top:2px;
-  text-transform:uppercase;
-}
-
-/* ── ICONS ── */
-#icons{
-  position:absolute;top:14px;left:14px;
-  display:flex;flex-direction:column;gap:4px;z-index:10;
-}
-
-.dicon{
-  display:flex;flex-direction:column;align-items:center;
-  width:72px;padding:6px 4px 4px;border-radius:3px;
-  cursor:pointer;position:relative;
-  transition:background .15s;
-}
-.dicon:hover{background:rgba(255,255,255,0.07);}
-.dicon.pulse{background:rgba(100,200,140,0.08);}
-
-.dicon-fig{width:46px;height:40px;position:relative;flex-shrink:0;}
-
-.folder-body{
-  position:absolute;bottom:0;left:0;width:46px;height:32px;
-  border-radius:0 2px 2px 2px;
-}
-.folder-tab{
-  position:absolute;top:0;left:0;width:20px;height:8px;border-radius:2px 2px 0 0;
-}
-
-.dicon-em{
-  position:absolute;bottom:3px;right:2px;
-  font-size:14px;line-height:1;
-}
-
-.dicon-label{
-  margin-top:3px;font-size:9px;text-align:center;
-  color:rgba(210,230,220,.8);
-  text-shadow:0 1px 4px rgba(0,0,0,.95),0 0 10px rgba(0,0,0,.8);
-  line-height:1.25;word-break:break-word;max-width:70px;
-}
-
-/* hover timer ring */
-.ring-svg{
-  position:absolute;top:-3px;left:-3px;width:52px;height:46px;
-  pointer-events:none;opacity:0;transition:opacity .3s;
-}
-.dicon:hover .ring-svg{opacity:1;}
-.ring-svg circle{
-  fill:none;stroke:rgba(80,200,130,.5);stroke-width:1.5;
-  stroke-dasharray:138;stroke-dashoffset:138;
-}
-.dicon.counting .ring-svg circle{
-  stroke-dashoffset:0;transition:stroke-dashoffset 30s linear;
+  #taskbar{position:fixed;bottom:0;left:0;right:0;height:38px;background:rgba(5,10,16,.99);
+    border-top:1px solid rgba(45,90,60,.25);display:flex;align-items:center;z-index:2000;padding:0 6px;gap:5px;}
+  .tb-start{height:26px;padding:0 10px;background:rgba(15,50,30,.35);border:1px solid rgba(60,120,80,.28);
+    color:rgba(140,210,175,.7);font-size:10px;cursor:pointer;letter-spacing:1px;flex-shrink:0;}
+  .tb-start:hover{background:rgba(20,65,40,.5);}
+  .tb-sep{width:1px;height:20px;background:rgba(60,100,75,.18);flex-shrink:0;}
+  #tb-wins{display:flex;gap:3px;flex:1;overflow:hidden;}
+  .tb-wbtn{height:26px;padding:0 9px;background:rgba(10,18,14,.8);border:1px solid rgba(50,90,65,.18);
+    color:rgba(155,200,178,.6);font-size:9.5px;cursor:pointer;white-space:nowrap;max-width:150px;overflow:hidden;text-overflow:ellipsis;}
+  .tb-wbtn:hover,.tb-wbtn.on{background:rgba(22,48,34,.85);border-color:rgba(60,120,85,.32);color:rgba(190,225,208,.85);}
+  #tb-clock{font-size:10.5px;color:rgba(140,190,165,.5);padding:0 10px;flex-shrink:0;text-align:right;line-height:1.4;}
+  .notif-d{position:fixed;bottom:50px;right:12px;background:rgba(8,14,12,.98);
+    border:1px solid rgba(60,110,80,.28);border-left:2.5px solid rgba(50,180,100,.4);
+    padding:9px 13px;font-size:9.5px;color:rgba(150,205,175,.75);max-width:230px;z-index:3000;line-height:1.55;
+    box-shadow:0 4px 18px rgba(0,0,0,.55);animation:nin .3s ease;}
+  @keyframes nin{from{transform:translateX(110%);opacity:0}to{transform:none;opacity:1}}
+  @keyframes nout{from{opacity:1}to{transform:translateX(110%);opacity:0}}
+  #ctx{position:fixed;background:rgba(7,13,11,.99);border:1px solid rgba(55,100,70,.3);z-index:4000;min-width:170px;box-shadow:3px 4px 14px rgba(0,0,0,.65);}
+  .ctx-i{padding:6px 14px;font-size:10px;color:rgba(160,205,182,.75);cursor:pointer;}
+  .ctx-i:hover{background:rgba(25,60,40,.5);}
+  .ctx-d{height:1px;background:rgba(55,100,70,.18);margin:2px 0;}
 }
 
-/* ── WINDOWS ── */
-.win{
-  position:absolute;
-  background:rgba(9,14,20,.97);
-  border:1px solid rgba(60,110,80,.28);
-  border-radius:2px;
-  display:flex;flex-direction:column;
-  box-shadow:0 12px 40px rgba(0,0,0,.7),0 0 0 1px rgba(80,160,110,.06);
-  min-width:320px;min-height:180px;
-}
-.win.hidden{display:none;}
-.win.maxed{top:0!important;left:0!important;width:100%!important;height:100%!important;}
-
-.win-bar{
-  display:flex;align-items:center;height:28px;padding:0 8px;gap:7px;
-  background:rgba(12,18,26,.99);
-  border-bottom:1px solid rgba(60,110,80,.2);
-  border-radius:2px 2px 0 0;cursor:grab;flex-shrink:0;
-}
-.win-bar:active{cursor:grabbing;}
-
-.wbtn{width:11px;height:11px;border-radius:50%;border:none;cursor:pointer;flex-shrink:0;}
-.wbtn.cl{background:#8b2c2c;}
-.wbtn.mn{background:#6a5c00;}
-.wbtn.mx{background:#1a5a30;}
-.wbtn.cl:hover{background:#c0392b;}
-.wbtn.mn:hover{background:#d4ac00;}
-.wbtn.mx:hover{background:#27ae60;}
-
-.win-title{
-  font-size:10px;color:rgba(180,210,195,.55);
-  font-family:'Share Tech Mono',monospace;letter-spacing:.6px;
-  flex:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;
-}
-
-.win-body{
-  flex:1;overflow-y:auto;overflow-x:hidden;padding:18px 20px;
-  scrollbar-width:thin;scrollbar-color:rgba(60,110,80,.25) transparent;
-}
-.win-body::-webkit-scrollbar{width:3px;}
-.win-body::-webkit-scrollbar-thumb{background:rgba(60,110,80,.25);border-radius:2px;}
-
-/* project content */
+/* ════════════════════════════════════════════
+   SHARED PROJECT CONTENT STYLES
+════════════════════════════════════════════ */
 .p-type{font-size:8.5px;color:rgba(90,190,130,.55);letter-spacing:2px;text-transform:uppercase;margin-bottom:5px;}
 .p-name{font-family:'Libre Baskerville',serif;font-size:20px;color:rgba(220,235,225,.92);font-weight:400;line-height:1.2;}
-.p-year{font-size:9px;color:rgba(130,180,155,.35);letter-spacing:.5px;margin-top:3px;margin-bottom:14px;}
-
-.p-media{
-  width:100%;aspect-ratio:16/9;
-  background:rgba(0,0,0,.35);
-  border:1px solid rgba(60,110,80,.12);
-  margin-bottom:16px;
-  display:flex;align-items:center;justify-content:center;
-  position:relative;overflow:hidden;
-}
-.p-media-inner{
-  display:flex;flex-direction:column;align-items:center;gap:6px;
-  font-family:'Share Tech Mono',monospace;font-size:9px;
-  color:rgba(80,140,110,.35);text-align:center;
-}
+.p-year{font-size:9px;color:rgba(130,180,155,.35);margin-top:3px;margin-bottom:14px;}
+.p-media{width:100%;aspect-ratio:16/9;background:rgba(0,0,0,.35);border:1px solid rgba(60,110,80,.12);
+  margin-bottom:16px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.p-media::before{content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(0deg,rgba(0,80,40,.02),rgba(0,80,40,.02) 2px,transparent 2px,transparent 8px);}
+.p-media-inner{display:flex;flex-direction:column;align-items:center;gap:6px;
+  font-size:9px;color:rgba(80,140,110,.35);text-align:center;}
 .p-media-inner span{font-size:20px;opacity:.3;}
-/* animated scan in media placeholder */
-.p-media::before{
-  content:'';position:absolute;inset:0;
-  background:repeating-linear-gradient(0deg,rgba(0,80,40,.02),rgba(0,80,40,.02) 2px,transparent 2px,transparent 8px);
-}
-
-.p-desc{
-  font-family:'Libre Baskerville',serif;font-style:italic;
-  font-size:12.5px;color:rgba(185,210,198,.75);line-height:1.85;margin-bottom:14px;
-}
-.p-loc{font-size:9px;color:rgba(90,180,130,.45);font-family:'Share Tech Mono',monospace;margin-bottom:12px;letter-spacing:.3px;}
+.p-desc{font-family:'Libre Baskerville',serif;font-style:italic;font-size:12.5px;
+  color:rgba(185,210,198,.75);line-height:1.85;margin-bottom:14px;}
+.p-loc{font-size:9px;color:rgba(90,180,130,.45);margin-bottom:12px;letter-spacing:.3px;}
 .p-tags{display:flex;flex-wrap:wrap;gap:4px;}
-.tag{
-  padding:2px 7px;border:1px solid rgba(60,110,80,.25);
-  font-size:8.5px;color:rgba(110,175,145,.55);
-  font-family:'Share Tech Mono',monospace;letter-spacing:.8px;
-}
-
-.rh{position:absolute;bottom:0;right:0;width:12px;height:12px;cursor:se-resize;opacity:.25;}
-.rh::after{content:'◢';font-size:10px;color:rgba(80,160,110,.6);position:absolute;bottom:1px;right:1px;}
-
-/* ── PHOTO WINDOWS ── */
-.photo-win{min-width:unset!important;min-height:unset!important;animation:phIn .24s ease;}
-@keyframes phIn{from{opacity:0;transform:scale(.91) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
-.photo-win .win-bar{height:22px;padding:0 5px;}
-.photo-body{flex:1;position:relative;overflow:hidden;}
-.photo-body::before{
-  content:'';position:absolute;inset:0;pointer-events:none;z-index:1;
-  background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.032) 3px,rgba(0,0,0,0.032) 4px);
-}
-.ph-idx{
-  position:absolute;bottom:6px;right:8px;z-index:2;
-  font-family:'Share Tech Mono',monospace;font-size:8px;
-  color:rgba(255,255,255,.22);letter-spacing:.6px;
-}
-
-/* bio window */
+.tag{padding:2px 7px;border:1px solid rgba(60,110,80,.25);font-size:8.5px;color:rgba(110,175,145,.55);letter-spacing:.8px;}
+.extra-placeholder{font-size:9.5px;color:rgba(90,150,120,.35);line-height:1.8;letter-spacing:.3px;}
+.extra-content{font-family:'Libre Baskerville',serif;font-size:12.5px;color:rgba(175,205,190,.7);line-height:1.9;}
+.papelera-note{font-size:9px;color:rgba(180,120,100,.6);letter-spacing:.8px;line-height:1.7;
+  border-left:2px solid rgba(180,80,60,.35);padding-left:10px;margin-bottom:18px;}
+.papelera-proj{border:1px solid rgba(180,80,60,.18);padding:14px 16px;}
+.papelera-proj .p-name{font-size:16px;color:rgba(210,185,175,.82);}
+.papelera-proj .p-desc{color:rgba(175,155,148,.65);}
+.sub-proj{border:1px solid rgba(60,110,80,.18);margin-bottom:8px;cursor:pointer;transition:border-color .15s;}
+.sub-proj:hover{border-color:rgba(60,110,80,.38);}
+.sub-header{display:flex;align-items:center;gap:10px;padding:10px 12px;}
+.sub-em{font-size:18px;flex-shrink:0;}
+.sub-info{flex:1;}
+.sub-name{font-family:'Libre Baskerville',serif;font-size:14px;color:rgba(210,230,220,.85);}
+.sub-meta{font-size:8.5px;color:rgba(90,160,130,.45);margin-top:2px;letter-spacing:.4px;}
+.sub-arrow{font-size:8px;color:rgba(100,170,140,.4);flex-shrink:0;transition:transform .2s;}
+.sub-proj.open .sub-arrow{transform:rotate(180deg);}
+.sub-body{display:none;padding:10px 12px 12px;border-top:1px solid rgba(60,110,80,.12);
+  font-family:'Libre Baskerville',serif;font-style:italic;font-size:12px;color:rgba(175,205,190,.7);line-height:1.8;}
+.sub-proj.open .sub-body{display:block;}
 .bio-name{font-family:'Libre Baskerville',serif;font-size:22px;color:rgba(225,238,230,.92);font-weight:400;margin-bottom:3px;}
-.bio-sub{font-size:9px;color:rgba(90,180,130,.5);font-family:'Share Tech Mono',monospace;letter-spacing:2px;text-transform:uppercase;margin-bottom:18px;}
+.bio-sub{font-size:9px;color:rgba(90,180,130,.5);letter-spacing:2px;text-transform:uppercase;margin-bottom:18px;}
 .bio-p{font-family:'Libre Baskerville',serif;font-size:12.5px;color:rgba(185,210,198,.75);line-height:1.85;margin-bottom:12px;}
 .bio-hl{color:rgba(225,238,230,.88);font-style:italic;}
-.bio-foot{font-size:9.5px;font-family:'Share Tech Mono',monospace;color:rgba(90,160,130,.4);margin-top:16px;line-height:1.7;}
+.bio-foot{font-size:9.5px;color:rgba(90,160,130,.4);margin-top:16px;line-height:1.8;}
 .bio-link{color:rgba(90,190,140,.5);text-decoration:none;border-bottom:1px solid rgba(90,190,140,.25);}
 .bio-link:hover{color:rgba(100,210,155,.7);}
 
-/* ── WEATHER POPUP ── */
+/* Desktop shared small */
 .wx-wrap{text-align:center;padding:4px;}
 .wx-icon{font-size:30px;margin-bottom:4px;}
 .wx-temp{font-family:'Libre Baskerville',serif;font-size:34px;color:rgba(210,235,220,.88);}
-.wx-city{font-size:9px;color:rgba(90,170,130,.5);letter-spacing:2.5px;text-transform:uppercase;font-family:'Share Tech Mono',monospace;margin-top:3px;}
-.wx-desc{font-size:9.5px;color:rgba(140,190,165,.4);font-family:'Share Tech Mono',monospace;margin-top:7px;line-height:1.6;}
-
-/* ── CALCULATOR ── */
-.calc-disp{
-  background:rgba(0,0,0,.3);border:1px solid rgba(60,110,80,.18);
-  padding:8px 10px;text-align:right;
-  font-family:'Share Tech Mono',monospace;font-size:20px;
-  color:rgba(170,230,200,.88);min-height:44px;
-  display:flex;align-items:center;justify-content:flex-end;
-  margin-bottom:6px;letter-spacing:1px;overflow:hidden;
-}
-.calc-sub{font-size:9px;color:rgba(90,160,120,.4);text-align:right;margin-bottom:8px;font-family:'Share Tech Mono',monospace;min-height:12px;}
+.wx-city{font-size:9px;color:rgba(90,170,130,.5);letter-spacing:2.5px;text-transform:uppercase;margin-top:3px;}
+.wx-desc{font-size:9.5px;color:rgba(140,190,165,.4);margin-top:7px;line-height:1.6;}
+.calc-sub{font-size:9px;color:rgba(90,160,120,.4);text-align:right;margin-bottom:8px;min-height:12px;}
+.calc-disp{background:rgba(0,0,0,.3);border:1px solid rgba(60,110,80,.18);padding:8px 10px;text-align:right;
+  font-size:20px;color:rgba(170,230,200,.88);min-height:44px;display:flex;align-items:center;justify-content:flex-end;margin-bottom:6px;overflow:hidden;}
 .calc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:3px;}
-.cbtn{
-  padding:8px 2px;background:rgba(12,20,16,.85);
-  border:1px solid rgba(50,90,65,.2);
-  color:rgba(155,205,178,.75);font-family:'Share Tech Mono',monospace;font-size:11px;
-  cursor:pointer;transition:background .1s;
-}
+.cbtn{padding:8px 2px;background:rgba(12,20,16,.85);border:1px solid rgba(50,90,65,.2);color:rgba(155,205,178,.75);font-size:11px;cursor:pointer;}
 .cbtn:hover{background:rgba(25,50,38,.9);}
-.cbtn.op{color:rgba(90,200,140,.7);border-color:rgba(60,130,90,.25);}
+.cbtn.op{color:rgba(90,200,140,.7);}
 .cbtn.eq{background:rgba(15,60,35,.6);color:rgba(110,220,155,.8);}
 .cbtn.span2{grid-column:span 2;}
 
-/* ── TASKBAR ── */
-#taskbar{
-  position:fixed;bottom:0;left:0;right:0;height:38px;
-  background:rgba(5,10,16,.99);border-top:1px solid rgba(45,90,60,.25);
-  display:flex;align-items:center;z-index:2000;padding:0 6px;gap:5px;
-}
-.tb-start{
-  height:26px;padding:0 10px;
-  background:rgba(15,50,30,.35);border:1px solid rgba(60,120,80,.28);
-  color:rgba(140,210,175,.7);font-size:10px;font-family:'Share Tech Mono',monospace;
-  cursor:pointer;letter-spacing:1px;flex-shrink:0;transition:background .15s;
-}
-.tb-start:hover{background:rgba(20,65,40,.5);}
-.tb-sep{width:1px;height:20px;background:rgba(60,100,75,.18);flex-shrink:0;}
-#tb-wins{display:flex;gap:3px;flex:1;overflow:hidden;}
-.tb-wbtn{
-  height:26px;padding:0 9px;
-  background:rgba(10,18,14,.8);border:1px solid rgba(50,90,65,.18);
-  color:rgba(155,200,178,.6);font-size:9.5px;font-family:'Share Tech Mono',monospace;
-  cursor:pointer;white-space:nowrap;max-width:150px;overflow:hidden;
-  text-overflow:ellipsis;transition:background .1s;
-}
-.tb-wbtn:hover,.tb-wbtn.on{background:rgba(22,48,34,.85);border-color:rgba(60,120,85,.32);color:rgba(190,225,208,.85);}
-#tb-clock{
-  font-family:'Share Tech Mono',monospace;font-size:10.5px;
-  color:rgba(140,190,165,.5);padding:0 10px;flex-shrink:0;
-  text-align:right;line-height:1.4;
-}
+/* ════════════════════════════════════════════
+   MOBILE (≤680px)
+════════════════════════════════════════════ */
+@media(max-width:680px){
+  #desktop,#taskbar{display:none!important;}
 
-/* ── NOTIFICATIONS ── */
-.notif{
-  position:fixed;bottom:50px;right:12px;
-  background:rgba(8,14,12,.98);
-  border:1px solid rgba(60,110,80,.28);border-left:2.5px solid rgba(50,180,100,.4);
-  padding:9px 13px;font-family:'Share Tech Mono',monospace;font-size:9.5px;
-  color:rgba(150,205,175,.75);max-width:230px;z-index:3000;line-height:1.55;
-  box-shadow:0 4px 18px rgba(0,0,0,.55);
-  animation:nin .3s ease;
-}
-@keyframes nin{from{transform:translateX(110%);opacity:0}to{transform:translateX(0);opacity:1}}
-@keyframes nout{from{transform:translateX(0);opacity:1}to{transform:translateX(110%);opacity:0}}
+  #mobile-ui{
+    position:fixed;inset:0;
+    display:flex;flex-direction:column;
+    background:#04090f;overflow:hidden;
+  }
 
-/* ── CONTEXT MENU ── */
-#ctx{
-  position:fixed;background:rgba(7,13,11,.99);
-  border:1px solid rgba(55,100,70,.3);z-index:4000;min-width:170px;
-  box-shadow:3px 4px 14px rgba(0,0,0,.65);
-}
-.ctx-i{padding:6px 14px;font-size:10px;color:rgba(160,205,182,.75);font-family:'Share Tech Mono',monospace;cursor:pointer;transition:background .1s;}
-.ctx-i:hover{background:rgba(25,60,40,.5);}
-.ctx-d{height:1px;background:rgba(55,100,70,.18);margin:2px 0;}
+  /* Wallpaper */
+  #mob-wp{
+    position:absolute;inset:0;z-index:0;
+    background:linear-gradient(160deg,#0a1628 0%,#04090f 55%,#061410 100%);
+  }
+  #mob-wp::before{
+    content:'';position:absolute;inset:0;
+    background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.03) 3px,rgba(0,0,0,.03) 4px);
+    pointer-events:none;
+  }
 
-/* ── MOBILE NOTICE ── */
-#mob{
-  display:none;position:fixed;inset:0;background:#04090f;
-  flex-direction:column;align-items:center;justify-content:center;
-  z-index:9999;padding:30px;text-align:center;
+  /* Status bar */
+  #mob-status{
+    position:relative;z-index:10;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:12px 18px 6px;height:44px;flex-shrink:0;
+  }
+  #mob-time-s{font-size:15px;color:rgba(220,235,225,.88);letter-spacing:.5px;font-weight:500;}
+  #mob-status-icons{display:flex;align-items:center;gap:6px;}
+  .mob-sig{display:flex;align-items:flex-end;gap:1.5px;}
+  .mob-sig span{width:3px;background:rgba(200,225,215,.7);border-radius:1px;}
+  .mob-sig span:nth-child(1){height:5px;}
+  .mob-sig span:nth-child(2){height:8px;}
+  .mob-sig span:nth-child(3){height:11px;}
+  .mob-sig span:nth-child(4){height:14px;}
+  .mob-wifi{font-size:13px;color:rgba(200,225,215,.7);}
+  .mob-bat{font-size:13px;color:rgba(200,225,215,.7);}
+
+  /* Notification drop zone */
+  #mob-notif-zone{
+    position:absolute;top:44px;left:0;right:0;z-index:200;
+    display:flex;flex-direction:column;gap:6px;padding:0 12px;
+    pointer-events:none;
+  }
+  .mob-notif{
+    background:rgba(12,20,28,.94);
+    border:1px solid rgba(60,110,80,.3);
+    border-radius:14px;padding:10px 14px;
+    display:flex;align-items:center;gap:10px;
+    box-shadow:0 6px 24px rgba(0,0,0,.55);
+    pointer-events:all;
+    transform:translateY(-80px);opacity:0;
+    transition:transform .35s cubic-bezier(.22,1,.36,1),opacity .3s ease;
+  }
+  .mob-notif.show{transform:translateY(0);opacity:1;}
+  .mob-notif.hide{transform:translateY(-80px);opacity:0;}
+  .mob-notif-icon{font-size:20px;flex-shrink:0;width:36px;height:36px;
+    background:rgba(255,255,255,.06);border-radius:8px;display:flex;align-items:center;justify-content:center;}
+  .mob-notif-body{flex:1;min-width:0;}
+  .mob-notif-from{font-size:9px;color:rgba(90,180,130,.6);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:2px;}
+  .mob-notif-text{font-family:'Libre Baskerville',serif;font-size:13px;color:rgba(210,230,220,.85);line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .mob-notif-x{font-size:14px;color:rgba(130,170,150,.4);cursor:pointer;flex-shrink:0;padding:4px;}
+  .mob-notif-x:hover{color:rgba(180,210,195,.7);}
+
+  /* App grid */
+  #mob-grid{
+    flex:1;position:relative;z-index:5;
+    display:grid;grid-template-columns:repeat(4,1fr);
+    gap:6px;padding:16px 14px 10px;
+    align-content:start;overflow-y:auto;
+    scrollbar-width:none;
+  }
+  #mob-grid::-webkit-scrollbar{display:none;}
+
+  .mob-app{
+    display:flex;flex-direction:column;align-items:center;gap:5px;
+    cursor:pointer;padding:6px 2px;border-radius:12px;
+    transition:background .15s;-webkit-tap-highlight-color:transparent;
+  }
+  .mob-app:active{background:rgba(255,255,255,.08);}
+  .mob-app-icon{
+    width:58px;height:58px;border-radius:14px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:26px;flex-shrink:0;
+    box-shadow:0 3px 12px rgba(0,0,0,.5);
+    position:relative;overflow:hidden;
+  }
+  .mob-app-icon::after{
+    content:'';position:absolute;inset:0;
+    background:linear-gradient(145deg,rgba(255,255,255,.12) 0%,transparent 60%);
+    border-radius:14px;
+  }
+  .mob-app-label{font-size:9px;color:rgba(215,228,222,.82);text-align:center;
+    text-shadow:0 1px 4px rgba(0,0,0,.9);line-height:1.2;max-width:64px;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+  /* Dock */
+  #mob-dock{
+    position:relative;z-index:10;
+    display:flex;justify-content:center;gap:14px;
+    padding:10px 20px 20px;flex-shrink:0;
+  }
+  #mob-dock::before{
+    content:'';position:absolute;inset:0;border-radius:24px 24px 0 0;
+    background:rgba(255,255,255,.06);backdrop-filter:blur(12px);
+    border-top:1px solid rgba(255,255,255,.1);
+  }
+  #mob-dock .mob-app{position:relative;z-index:1;}
+  #mob-dock .mob-app-icon{width:54px;height:54px;}
+
+  /* Full-screen project panel */
+  #mob-panel{
+    position:fixed;inset:0;z-index:500;
+    background:rgba(9,14,20,.99);
+    display:flex;flex-direction:column;
+    transform:translateY(100%);transition:transform .38s cubic-bezier(.22,1,.36,1);
+  }
+  #mob-panel.open{transform:translateY(0);}
+
+  #mob-panel-bar{
+    display:flex;align-items:center;height:52px;padding:0 16px;gap:12px;
+    background:rgba(12,18,26,.99);border-bottom:1px solid rgba(60,110,80,.2);
+    flex-shrink:0;
+  }
+  #mob-panel-back{
+    width:32px;height:32px;border:none;background:rgba(255,255,255,.07);
+    border-radius:50%;color:rgba(180,220,200,.7);font-size:18px;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+  #mob-panel-title{font-size:11px;color:rgba(180,210,195,.6);letter-spacing:.6px;flex:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+
+  #mob-panel-tabs{
+    display:flex;border-bottom:1px solid rgba(60,110,80,.2);
+    background:rgba(10,16,14,.99);flex-shrink:0;
+  }
+  .mob-tab{
+    flex:1;padding:10px 4px;font-size:10px;letter-spacing:.8px;
+    color:rgba(130,180,158,.45);cursor:pointer;border:none;background:transparent;
+    border-bottom:2px solid transparent;transition:color .15s,border-color .15s;text-align:center;
+  }
+  .mob-tab.on{color:rgba(180,230,205,.88);border-bottom-color:rgba(60,180,100,.5);}
+
+  #mob-panel-body{flex:1;overflow-y:auto;padding:20px 18px 40px;
+    scrollbar-width:thin;scrollbar-color:rgba(60,110,80,.2) transparent;}
+  #mob-panel-body .p-name{font-size:22px;}
+
+  /* Handle bar */
+  #mob-handle{
+    height:28px;display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;cursor:pointer;
+  }
+  #mob-handle::after{content:'';width:36px;height:4px;background:rgba(255,255,255,.15);border-radius:2px;}
 }
-@media(max-width:680px){#mob{display:flex;}#desktop,#taskbar{display:none;}}
-.mob-t{font-family:'Libre Baskerville',serif;font-size:22px;color:rgba(220,235,225,.85);font-style:italic;margin-bottom:14px;}
-.mob-s{font-family:'Share Tech Mono',monospace;font-size:10px;color:rgba(90,170,130,.5);letter-spacing:1.5px;line-height:1.8;}
 </style>
 </head>
 <body>
 
-<div id="mob">
-  <div class="mob-t">Esta experiencia requiere una pantalla mayor.</div>
-  <div class="mob-s">La web de Martín Fernández Navarro<br>funciona como escritorio de computadora.<br><br>Visitala desde un ordenador.</div>
-</div>
-
+<!-- ══ DESKTOP ══════════════════════════════ -->
 <div id="desktop" oncontextmenu="showCtx(event)"></div>
-
 <div id="taskbar">
   <button class="tb-start" onclick="openBio()">MFN</button>
   <div class="tb-sep"></div>
@@ -331,758 +336,722 @@ body{width:100vw;height:100vh;overflow:hidden;background:#04090f;font-family:'Sh
   <div id="tb-clock"></div>
 </div>
 
+<!-- ══ MOBILE ════════════════════════════════ -->
+<div id="mobile-ui">
+  <div id="mob-wp"></div>
+  <div id="mob-status">
+    <span id="mob-time-s"></span>
+    <div id="mob-status-icons">
+      <div class="mob-sig"><span></span><span></span><span></span><span></span></div>
+      <span class="mob-wifi">⊛</span>
+      <span class="mob-bat">▭</span>
+    </div>
+  </div>
+  <div id="mob-notif-zone"></div>
+  <div id="mob-grid"></div>
+  <div id="mob-dock"></div>
+
+  <!-- Project panel -->
+  <div id="mob-panel">
+    <div id="mob-handle" onclick="closeMobPanel()"></div>
+    <div id="mob-panel-bar">
+      <button id="mob-panel-back" onclick="closeMobPanel()">‹</button>
+      <div id="mob-panel-title"></div>
+    </div>
+    <div id="mob-panel-tabs">
+      <button class="mob-tab on" onclick="mobSwTab(this,'main')">Proyecto</button>
+      <button class="mob-tab" onclick="mobSwTab(this,'extra')">Extra</button>
+    </div>
+    <div id="mob-panel-body"></div>
+  </div>
+</div>
+
 <script>
-/* ─── DATA ─── */
+/* ══════════════════════════════════════════════════════
+   WALLPAPER CONFIG
+   Subí tu video/gif a GitHub junto al index.html
+   Cambiá null por: './wallpaper.mp4' o './wallpaper.gif'
+══════════════════════════════════════════════════════ */
+const WALLPAPER_FILE = null;
+
+/* ══════════════════════════════════════════════════════
+   MOBILE NOTIFICATIONS
+   Editá este array para personalizar las notificaciones.
+   Cada objeto:
+     icon  → emoji que aparece en el cuadrado izquierdo
+     from  → texto pequeño arriba (remitente / app)
+     text  → mensaje principal
+     delay → tiempo en milisegundos antes de aparecer
+             (1000 = 1 segundo)
+
+   Para que salgan después de las primeras:
+   sumá el tiempo de las anteriores + cuánto querés esperar.
+══════════════════════════════════════════════════════ */
+const MOB_NOTIFS = [
+  { icon:'📡', from:'sistema',            text:'Bienvenido/a.',                               delay:2500  },
+  { icon:'🌿', from:'Después del Jardín', text:'Instalación · Centro Cultural Goes · 2026',   delay:9000  },
+  { icon:'📦', from:'Depósito Cero',      text:'Museo García Uriburu · Maldonado · 2026',     delay:19000 },
+  { icon:'⚙',  from:'Ciborga',           text:'CBA Madrid · 2024',                           delay:32000 },
+  { icon:'✦',  from:'Tecnorituales',      text:'CCE Montevideo · 2023',                       delay:48000 },
+  { icon:'📋', from:'Recursos Humanos',  text:'Investigación en curso · Madrid',              delay:65000 },
+];
+
+/* ─── PROJECTS ─── */
 const PROJECTS = [
-  {
-    id:'jardin',em:'🌿',fc:'#1a4828',ft:'#1a3e22',
-    name:'Jardín Imposible',short:'Jardín Imposible',
-    year:'2026',type:'Instalación performática',
-    desc:'"Busco la solución en aquello que me generó el problema." El jardín no es naturaleza: es compensación. No es refugio real: es una interfaz de regulación emocional. Proyecto sobre la imposibilidad de retorno a lo natural, la construcción de entornos sustitutos, la dependencia tecnológica y la continuidad artificial de la vida.',
-    loc:'Centro Cultural Goes, Montevideo — Abril 2026',
-    tags:['instalación','posnatural','sustitución','dependencia energética','intermitencia'],
-    pw:244, ph:148,
-    prevBg:`linear-gradient(180deg,#040c06 0%,#081808 12%,#102a14 24%,#1a4a22 36%,#226030 46%,#2c7840 54%,#1e5c2c 64%,#124020 76%,#082a12 88%,#040c06 100%)`,
-    prevExtra:`repeating-linear-gradient(90deg,transparent,transparent 22px,rgba(60,160,80,.04) 22px,rgba(60,160,80,.04) 23px)`,
-    wpBg:`radial-gradient(ellipse 130% 70% at 50% 110%,rgba(8,36,16,.72) 0%,rgba(4,16,8,.45) 55%,transparent 100%)`
+  { id:'jardin',       em:'🌿', fc:'#1a4828', ft:'#1a3e22', mobBg:'linear-gradient(145deg,#1a4828,#2c6840)',
+    name:'Después del Jardín', short:'Después del Jardín', year:'2026', type:'Instalación / Videoperformance',
+    desc:'La instalación articula tierra, brotes y restos orgánicos con una red visible de pantallas, cables y estructuras metálicas que operan como injertos tecnológicos. Más que representar la naturaleza, el sistema se comporta como un organismo inestable: las imágenes, los flujos y los dispositivos no se ocultan, sino que quedan expuestos, ajustándose y fallando a lo largo del tiempo de exhibición. Algunas piezas intentan sostener procesos vivos —iluminar, transmitir, hacer crecer— mientras otras los sustituyen o los agotan. El jardín deviene así un ecosistema híbrido donde los ritmos biológicos se enfrentan a la lógica intermitente, dependiente y material de la tecnología, revelando tanto su capacidad de asistencia como sus límites.',
+    loc:'Centro Cultural Goes, Montevideo — 2026',
+    tags:['instalación','videoperformance','ecosistema híbrido','posnatural','tecnología'],
+    extra:'',
+    pw:244,ph:148,prevBg:'linear-gradient(180deg,#040c06 0%,#1a4a22 45%,#226030 55%,#040c06 100%)',
+    wpBg:'radial-gradient(ellipse 130% 70% at 50% 110%,rgba(6,28,12,.62) 0%,rgba(4,16,8,.38) 55%,rgba(2,8,4,.08) 100%)'
   },
-  {
-    id:'cigomatico',em:'🫥',fc:'#3a1248',ft:'#2e0e3a',
-    name:'CIGOMÁTICO',short:'CIGOMÁTICO',
-    year:'2024—',type:'Videoperformance / Instalación',
-    desc:'Son las 1:30 de la madrugada de cualquier martes. Un músculo facial hipertrofiado y casi desgarrado por el bombardeo sin tregua de imágenes. La sonrisa como tecnología social: automatismo, interfaz, máscara, obligación performativa. El cuerpo-pantalla: el rostro como superficie de comunicación digitalizada.',
-    loc:'En proceso / circulación internacional',
-    tags:['videoperformance','cuerpo-pantalla','economía de atención','interface','loop'],
-    pw:190, ph:190,
-    prevBg:`radial-gradient(ellipse 65% 55% at 50% 38%,#7a1e9a 0%,#4e0e72 22%,#2c0648 44%,#16042c 66%,#060110 100%)`,
-    prevExtra:`radial-gradient(ellipse 30% 20% at 50% 36%,rgba(220,160,255,.12) 0%,transparent 100%)`,
-    wpBg:`radial-gradient(ellipse 90% 60% at 50% 20%,rgba(55,8,80,.6) 0%,rgba(20,4,36,.38) 50%,transparent 100%)`
-  },
-  {
-    id:'ciborga',em:'⚙',fc:'#0e2848',ft:'#0a2038',
-    name:'Ciborga',short:'Ciborga',
-    year:'2024',type:'Performance',
-    desc:'Dispositivo performativo donde ecosistemas mediados e interfaces tecnológicas se activan a través de la presencia del cuerpo. Lo cyborg no como espectáculo futurista sino como condición cotidiana, emocional y doméstica. Seleccionada para la apertura del ciclo 2024–2025 del Círculo de Bellas Artes de Madrid.',
+  { id:'ciborga',      em:'⚙',  fc:'#0e2848', ft:'#0a2038', mobBg:'linear-gradient(145deg,#0e2848,#1a4068)',
+    name:'Ciborga', short:'Ciborga', year:'2024', type:'Performance',
+    desc:'Esta pieza materializa en imágenes y movimiento un futuro imaginado, posible y poco optimista —entre tantos otros— donde el avance tecnológico y las lógicas de consumo lo han conquistado todo. El cyborg se presenta, no como el siguiente eslabón en la cadena evolutiva, suprahumano y con capacidades extraordinarias, sino como un individuo producido y optimizado para el consumo. Infinitas posibilidades reducidas a mera simulación, seguras y asépticas. Una realidad virtual o una virtualidad hiperrealista que son pura mediación: nubes de datos, montañas de routers y campos enteros de tiras led.',
     loc:'Círculo de Bellas Artes, Madrid — 2024',
-    tags:['performance','cyborg','cuerpo','tecnología afectiva','cotidiano'],
-    pw:268, ph:130,
-    prevBg:`linear-gradient(155deg,#060c18 0%,#0e2040 40%,#1a3860 65%,#0e2848 82%,#060c18 100%)`,
-    prevExtra:`repeating-linear-gradient(-48deg,transparent,transparent 13px,rgba(60,110,190,.06) 13px,rgba(60,110,190,.06) 14px)`,
-    wpBg:`linear-gradient(180deg,rgba(6,18,38,.52) 0%,rgba(4,12,24,.28) 60%,transparent 100%)`
+    tags:['performance','cyborg','consumo','simulación','cuerpo mediado'],
+    extra:'Foto: Nacho Martín, cortesía del Círculo de Bellas Artes de Madrid.\nPieza seleccionada para la apertura de la temporada CBA 24/25.',
+    pw:268,ph:130,prevBg:'linear-gradient(155deg,#060c18 0%,#0e2040 40%,#1a3860 65%,#0e2848 100%)',
+    wpBg:'linear-gradient(180deg,rgba(4,14,36,.52) 0%,rgba(2,8,22,.28) 60%,rgba(0,4,10,.06) 100%)'
   },
-  {
-    id:'topologia',em:'🐀',fc:'#2e1808',ft:'#241408',
-    name:'Topología de una rata en P.O.V.',short:'Topología...',
-    year:'2025',type:'Videoperformance',
-    desc:'Una aproximación en primera persona —point of view— a los recorridos invisibles, las infraestructuras subterráneas y los márgenes de la ciudad. La cámara como extensión del cuerpo: el dispositivo como forma de habitar el espacio desde adentro. Presentada en el cierre del Festival de las Ideas de Madrid.',
-    loc:'Festival de las Ideas, Madrid — Mayo 2025',
-    tags:['videoperformance','P.O.V.','ciudad','infraestructura invisible','cuerpo-cámara'],
-    pw:182, ph:144,
-    prevBg:`linear-gradient(180deg,#0a0602 0%,#160e04 14%,#261808 28%,#382410 40%,#2c1c0c 52%,#1e1408 65%,#2a1a08 78%,#180e04 90%,#0a0602 100%)`,
-    prevExtra:`repeating-linear-gradient(0deg,transparent,transparent 11px,rgba(100,60,20,.08) 11px,rgba(100,60,20,.08) 12px)`,
-    wpBg:`radial-gradient(ellipse 100% 50% at 50% 100%,rgba(28,14,4,.58) 0%,rgba(12,6,2,.3) 55%,transparent 100%)`
+  { id:'recursos',     em:'📋', fc:'#2e2008', ft:'#241a06', mobBg:'linear-gradient(145deg,#2e2008,#4a3410)',
+    name:'Recursos Humanos', short:'Recursos Humanos', year:'2022—', type:'Investigación artística / Video / Performance',
+    desc:'Recursos Humanos es un trabajo de investigación artística que explora el mundo del corporativismo, la oficina como territorio simbólico y antropológico, y el ser empleado como una de las formas por excelencia de experienciar el mundo hoy. La investigación se organiza a partir de tres categorías transversales al proyecto y complementarias entre sí: espacio, cuerpo y objetos. Cada línea de investigación propone sus propios objetivos, metodologías y conclusiones, convirtiéndose, a su vez, en una indagación sobre las formas y posibilidades de investigar desde el arte. El objetivo final del proyecto es crear un catálogo de prácticas sensibles: un conjunto de reflexiones, esculturas, movimientos e imágenes que orbiten y condensen la experiencia y visión artística sobre la vida dentro de un cubículo.',
+    loc:'Madrid — 2022–2025',
+    tags:['investigación','oficina','cuerpo laboral','repetición','corporativismo'],
+    extra:'Fotos: César Dezfuli.',
+    pw:282,ph:116,prevBg:'linear-gradient(180deg,#0e0c06 0%,#1a1808 50%,#0e0c06 100%)',
+    wpBg:'linear-gradient(135deg,rgba(20,14,2,.50) 0%,rgba(10,8,0,.24) 55%,rgba(4,3,0,.06) 100%)'
   },
-  {
-    id:'recursos',em:'📋',fc:'#2e2008',ft:'#241a06',
-    name:'Recursos Humanos',short:'Recursos Humanos',
-    year:'2022—',type:'Instalación / Video / Performance',
-    desc:'Investigación artística sobre burocracia, oficina y trabajo repetitivo. El cuerpo laboral como estructura performática: coreografía de la eficiencia, automatización humana, fatiga física visible. Formularios, escritorios, archivos, gestos mínimos, acciones repetidas. El trabajo como maquinaria afectiva y ficción organizacional.',
-    loc:'Uruguay / España — En proceso',
-    tags:['instalación','trabajo','burocracia','cuerpo laboral','repetición absurda'],
-    pw:282, ph:116,
-    prevBg:`linear-gradient(180deg,#0e0c06 0%,#1a1808 50%,#0e0c06 100%)`,
-    prevExtra:`repeating-linear-gradient(0deg,transparent,transparent 17px,rgba(170,140,70,.07) 17px,rgba(170,140,70,.07) 18px),repeating-linear-gradient(90deg,transparent,transparent 17px,rgba(170,140,70,.05) 17px,rgba(170,140,70,.05) 18px)`,
-    wpBg:`linear-gradient(135deg,rgba(22,16,4,.5) 0%,rgba(14,10,2,.25) 50%,transparent 100%)`
+  { id:'quierescopia', em:'📄', fc:'#1e1e2e', ft:'#181828', mobBg:'linear-gradient(145deg,#1e1e3e,#2e2e5e)',
+    name:'¿Quieres Copia?', short:'¿Quieres Copia?', year:'2024', type:'Investigación plástica y visual',
+    desc:'En Madrid, a diferencia de en mi país, hay una costumbre que no se percibe como tal, que no figura en ningún libro de historia ni hace sentir orgulloso a ningún madrileño, y que sin embargo dio origen a esta obra. En Madrid, a cada rato te preguntan si quieres copia, un duplicado de algo del que se supone hay un original, el comprobante material de una transacción ya consumida. ¿Quieres Copia? es un ejercicio de investigación plástica y visual que funciona a su vez como una declaración de principios. Es una bandera de papel termosensible bajo la cual hasta el elemento más insignificante puede revelar un universo entero de formas e imágenes latentes. Un gesto de nostalgia anticipada que se pregunta por la digitalidad, la pérdida de la materia y la belleza de todas las cosas.',
+    loc:'Círculo de Bellas Artes, Madrid — 2024. Colectiva Accidentes, Semana de la Moda.',
+    tags:['visual','papel termosensible','materialidad','digitalidad','nostalgia'],
+    extra:'',
+    pw:255,ph:145,prevBg:'linear-gradient(180deg,#0e0e18 0%,#181828 50%,#0e0e18 100%)',
+    wpBg:'radial-gradient(ellipse 80% 60% at 50% 40%,rgba(20,20,40,.48) 0%,rgba(10,10,24,.26) 55%,rgba(4,4,10,.06) 100%)'
   },
-  {
-    id:'deposito',em:'📦',fc:'#083030',ft:'#062626',
-    name:'Depósito Esmeralda',short:'Depósito Esmeralda',
-    year:'2026',type:'Exposición individual',
-    desc:'Laboratorio, depósito, plataforma híbrida. Espacio de acumulación y reorganización: residuo, almacenamiento, circulación de objetos, valor ambiguo, archivo informal, acumulación afectiva. Infraestructuras invisibles. Zona de transición entre basura y obra, backstage material de la práctica artística.',
+  { id:'tecnorituales', em:'✦', fc:'#1e2a1e', ft:'#162016', mobBg:'linear-gradient(145deg,#1e2a1e,#2e3e2e)',
+    name:'Tecnorituales', short:'Tecnorituales', year:'2023', type:'Performance grupal',
+    desc:'Tomando como disparador el texto "La desaparición de los rituales" de Byung-Chul Han, Tecnorituales se propone como un momento para acercarse a la experiencia del ritual desde la música, la danza y el cuerpo, imaginando posibles estéticas y vínculos entre tecnología, naturaleza y el ser humano. La terraza del Centro Cultural de España funciona como tubo de ensayo: una gran performance grupal donde se roban pequeños fragmentos del futuro para hacerlos presente. Un espacio hiperbólico, por momentos fantasioso, que busca pensar posibles vínculos entre tecnología y naturaleza. Generación de visuales a partir de herramientas y tecnologías analógicas.',
+    loc:'Centro Cultural de España, Montevideo — 2023',
+    tags:['performance','ritual','tecnología','naturaleza','Byung-Chul Han'],
+    extra:'',
+    pw:255,ph:148,prevBg:'linear-gradient(180deg,#0a120a 0%,#1a2c1a 60%,#0e1a0e 100%)',
+    wpBg:'radial-gradient(ellipse 90% 60% at 50% 70%,rgba(8,28,8,.50) 0%,rgba(4,14,4,.26) 55%,rgba(2,6,2,.06) 100%)'
+  },
+  { id:'deposito',      em:'📦', fc:'#083030', ft:'#062626', mobBg:'linear-gradient(145deg,#083030,#104848)',
+    name:'Depósito Cero', short:'Depósito Cero', year:'2026', type:'Instalación / Videoinstalación / Performance',
+    desc:'Cartografía del agua como territorio en disputa. La instalación propone un depósito de agua recolectada en distintos puntos de Maldonado, almacenada en botellas dentro de cajones apilados que funcionan como un sistema de archivo o reserva. Inspirado en la obra "500 años de polución" de Nicolás García Uriburu, el proyecto reflexiona sobre la fragilidad de los ecosistemas costeros y la posibilidad de preservar, de forma simbólica, un paisaje hídrico amenazado por procesos de transformación y extractivismo. Los cajones son móviles y disponibles para que los visitantes puedan plantear nuevos escenarios y relaciones espaciales diferentes.',
     loc:'Museo Nicolás García Uriburu, Maldonado — Mayo 2026',
-    tags:['exposición','archivo','acumulación afectiva','depósito','valor ambiguo'],
-    pw:206, ph:164,
-    prevBg:`linear-gradient(180deg,#010c0c 0%,#041818 18%,#082828 35%,#0c3636 50%,#082c2c 65%,#041c1c 80%,#010c0c 100%)`,
-    prevExtra:`repeating-linear-gradient(0deg,transparent,transparent 26px,rgba(0,140,110,.06) 26px,rgba(0,140,110,.06) 27px),repeating-linear-gradient(90deg,transparent,transparent 26px,rgba(0,140,110,.04) 26px,rgba(0,140,110,.04) 27px)`,
-    wpBg:`radial-gradient(ellipse 80% 80% at 80% 50%,rgba(4,30,28,.55) 0%,rgba(2,14,14,.3) 55%,transparent 100%)`
+    tags:['instalación','agua','archivo','extractivismo','ecosistema costero'],
+    extra:'',
+    pw:206,ph:164,prevBg:'linear-gradient(180deg,#010c0c 0%,#082828 35%,#0c3636 50%,#010c0c 100%)',
+    wpBg:'radial-gradient(ellipse 80% 75% at 75% 55%,rgba(2,28,26,.52) 0%,rgba(0,14,12,.26) 55%,rgba(0,6,4,.06) 100%)'
   },
-  {
-    id:'masculinidades',em:'⚡',fc:'#300808',ft:'#260606',
-    name:'Masculinidades y pedagogías de la crueldad',short:'Masculinidades...',
-    year:'2024—',type:'Proyecto colaborativo',
-    desc:'Investigación sobre masculinidades, crueldad y pedagogías del género. Desarrollado junto a la artista mexicana Ana Segovia. Dispositivos escénicos y espaciales que invitan a una lectura sensible y política de lo cotidiano. La crueldad como estructura de formación de subjetividades.',
-    loc:'Uruguay / México — En proceso',
-    tags:['colaboración','género','performance','pedagogía crítica','crueldad'],
-    pw:224, ph:152,
-    prevBg:`linear-gradient(135deg,#0c0202 0%,#1c0606 30%,#300c0c 50%,#1c0606 70%,#0c0202 100%)`,
-    prevExtra:`repeating-linear-gradient(135deg,transparent,transparent 18px,rgba(160,20,20,.06) 18px,rgba(160,20,20,.06) 19px)`,
-    wpBg:`radial-gradient(ellipse 70% 60% at 20% 50%,rgba(40,6,6,.55) 0%,rgba(18,2,2,.3) 50%,transparent 100%)`
+  { id:'colaboraciones', em:'📁', fc:'#282818', ft:'#201e10', mobBg:'linear-gradient(145deg,#282818,#3c3820)',
+    name:'Colaboraciones', short:'Colaboraciones', year:'2021—', type:'Carpeta',
+    desc:'', loc:'', tags:[], extra:'',
+    pw:0,ph:0,prevBg:'',wpBg:''
   }
 ];
 
-/* ─── STATE ─── */
-let wZ = 100;
-const WINS = {};
-const TIMERS = {};
-const PHOTO_TIMERS = {};
-let calcExpr = '';
-let calcDisp = '0';
-
-/* ─── PHOTO PLACEHOLDERS ─── */
-/* Each project has 3 "photos" — dark documentation-photography gradients.
-   w/h define the window size; label is shown in the mini titlebar.
-   These are placeholders until real images are available. */
-const PHOTO_DATA = {
-  jardin:[
-    {w:340,h:210,label:'instalación · Goes',
-     bg:`radial-gradient(ellipse 65% 80% at 65% 35%,rgba(40,110,40,.55) 0%,rgba(10,40,15,.72) 58%,rgba(2,8,3,.97) 100%),repeating-linear-gradient(180deg,transparent,transparent 8px,rgba(0,80,20,.035) 8px,rgba(0,80,20,.035) 9px),linear-gradient(180deg,#020c04 0%,#061408 100%)`},
-    {w:235,h:305,label:'detalle vegetal',
-     bg:`radial-gradient(ellipse 50% 40% at 38% 28%,rgba(60,140,50,.5) 0%,rgba(15,50,15,.76) 55%,rgba(2,8,3,.97) 100%),linear-gradient(135deg,#020c04 0%,#081808 100%)`},
-    {w:395,h:198,label:'espacio · luz ambiente',
-     bg:`radial-gradient(ellipse 80% 50% at 50% 62%,rgba(30,90,35,.44) 0%,rgba(8,30,10,.66) 55%,rgba(1,5,2,.97) 100%),linear-gradient(180deg,#010a03 0%,#061208 100%)`},
-    {w:272,h:272,label:'plano cenital',
-     bg:`radial-gradient(ellipse 60% 60% at 50% 50%,rgba(50,120,45,.48) 0%,rgba(12,44,14,.70) 55%,rgba(2,8,3,.97) 100%),repeating-linear-gradient(90deg,transparent,transparent 22px,rgba(0,80,20,.03) 22px,rgba(0,80,20,.03) 23px),linear-gradient(180deg,#020c04 0%,#071508 100%)`},
-    {w:310,h:185,label:'proceso · montaje',
-     bg:`radial-gradient(ellipse 40% 60% at 22% 40%,rgba(45,115,40,.52) 0%,rgba(10,38,12,.74) 58%,rgba(2,7,3,.97) 100%),linear-gradient(160deg,#020b03 0%,#071508 100%)`},
-    {w:220,h:318,label:'cuerpo · jardín',
-     bg:`radial-gradient(ellipse 55% 45% at 55% 32%,rgba(35,100,35,.5) 0%,rgba(8,32,10,.73) 56%,rgba(1,6,2,.97) 100%),repeating-linear-gradient(0deg,transparent,transparent 10px,rgba(0,90,25,.03) 10px,rgba(0,90,25,.03) 11px),linear-gradient(200deg,#010a03 0%,#061408 100%)`},
-    {w:420,h:192,label:'vista final · clausura',
-     bg:`radial-gradient(ellipse 90% 45% at 48% 68%,rgba(28,85,32,.42) 0%,rgba(7,26,9,.64) 55%,rgba(1,4,1,.97) 100%),linear-gradient(180deg,#010903 0%,#051107 100%)`},
-  ],
-  cigomatico:[
-    {w:295,h:235,label:'cuerpo · pantalla',
-     bg:`radial-gradient(ellipse 45% 55% at 50% 40%,rgba(120,30,160,.65) 0%,rgba(55,8,80,.72) 45%,rgba(6,0,14,.97) 100%),linear-gradient(180deg,#040008 0%,#0a0018 100%)`},
-    {w:340,h:198,label:'serie · loop',
-     bg:`radial-gradient(ellipse 70% 40% at 50% 50%,rgba(90,20,130,.4) 0%,rgba(35,5,55,.66) 55%,rgba(4,0,10,.97) 100%),repeating-linear-gradient(90deg,transparent,transparent 48px,rgba(100,30,140,.05) 48px,rgba(100,30,140,.05) 49px),linear-gradient(180deg,#030007 0%,#080012 100%)`},
-    {w:228,h:310,label:'músculo · interfaz',
-     bg:`radial-gradient(ellipse 40% 60% at 50% 34%,rgba(100,25,145,.6) 0%,rgba(45,6,70,.73) 48%,rgba(4,0,12,.97) 100%),linear-gradient(180deg,#030008 0%,#08000f 100%)`},
-    {w:390,h:205,label:'1:30 AM · cualquier martes',
-     bg:`radial-gradient(ellipse 85% 45% at 50% 55%,rgba(80,15,120,.5) 0%,rgba(38,4,62,.68) 52%,rgba(4,0,10,.97) 100%),repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(90,0,130,.04) 3px,rgba(90,0,130,.04) 4px),linear-gradient(180deg,#020006 0%,#060010 100%)`},
-    {w:260,h:260,label:'rostro · automatismo',
-     bg:`radial-gradient(ellipse 50% 50% at 50% 45%,rgba(110,28,155,.58) 0%,rgba(50,7,78,.70) 46%,rgba(5,0,13,.97) 100%),linear-gradient(180deg,#030007 0%,#090013 100%)`},
-    {w:215,h:340,label:'máscara · obligación',
-     bg:`radial-gradient(ellipse 42% 65% at 44% 30%,rgba(95,22,140,.62) 0%,rgba(42,5,66,.72) 50%,rgba(4,0,11,.97) 100%),repeating-linear-gradient(180deg,transparent,transparent 4px,rgba(80,0,120,.04) 4px,rgba(80,0,120,.04) 5px),linear-gradient(180deg,#020007 0%,#07000e 100%)`},
-    {w:415,h:188,label:'economía · atención',
-     bg:`radial-gradient(ellipse 90% 40% at 50% 60%,rgba(70,12,105,.45) 0%,rgba(30,3,48,.64) 55%,rgba(3,0,8,.97) 100%),linear-gradient(180deg,#020005 0%,#05000c 100%)`},
-  ],
-  ciborga:[
-    {w:330,h:205,label:'performance · CBA Madrid',
-     bg:`radial-gradient(ellipse 60% 55% at 55% 45%,rgba(25,75,140,.55) 0%,rgba(8,28,58,.72) 52%,rgba(1,4,12,.97) 100%),repeating-linear-gradient(-45deg,transparent,transparent 14px,rgba(30,80,180,.035) 14px,rgba(30,80,180,.035) 15px),linear-gradient(180deg,#01040c 0%,#060e1c 100%)`},
-    {w:245,h:315,label:'cuerpo · tecnología',
-     bg:`radial-gradient(ellipse 40% 70% at 48% 30%,rgba(20,65,130,.6) 0%,rgba(6,22,52,.73) 50%,rgba(1,3,10,.97) 100%),linear-gradient(160deg,#01040b 0%,#05101e 100%)`},
-    {w:400,h:192,label:'espacio · escena',
-     bg:`radial-gradient(ellipse 85% 45% at 48% 65%,rgba(18,60,120,.44) 0%,rgba(5,20,48,.65) 55%,rgba(1,3,10,.97) 100%),linear-gradient(180deg,#01040b 0%,#04101c 100%)`},
-    {w:275,h:275,label:'cotidiano · cyborg',
-     bg:`radial-gradient(ellipse 55% 55% at 50% 50%,rgba(22,70,135,.5) 0%,rgba(7,24,55,.70) 52%,rgba(1,3,10,.97) 100%),repeating-linear-gradient(45deg,transparent,transparent 18px,rgba(20,70,180,.035) 18px,rgba(20,70,180,.035) 19px),linear-gradient(180deg,#01040c 0%,#050e1a 100%)`},
-    {w:315,h:200,label:'apertura ciclo 2024',
-     bg:`radial-gradient(ellipse 65% 50% at 35% 45%,rgba(18,58,125,.56) 0%,rgba(5,18,50,.72) 52%,rgba(1,2,9,.97) 100%),linear-gradient(155deg,#01030b 0%,#040d1c 100%)`},
-    {w:222,h:325,label:'ecosistema mediado',
-     bg:`radial-gradient(ellipse 45% 65% at 52% 35%,rgba(15,55,115,.58) 0%,rgba(4,16,45,.73) 50%,rgba(0,2,8,.97) 100%),repeating-linear-gradient(-48deg,transparent,transparent 12px,rgba(25,75,175,.04) 12px,rgba(25,75,175,.04) 13px),linear-gradient(170deg,#010409 0%,#040e1b 100%)`},
-    {w:405,h:186,label:'presencia · activación',
-     bg:`radial-gradient(ellipse 88% 42% at 50% 62%,rgba(16,52,110,.42) 0%,rgba(4,15,42,.62) 55%,rgba(1,2,8,.97) 100%),linear-gradient(180deg,#010308 0%,#030c18 100%)`},
-  ],
-  topologia:[
-    {w:318,h:215,label:'P.O.V. · subterráneo',
-     bg:`radial-gradient(ellipse 40% 60% at 50% 50%,rgba(65,35,12,.6) 0%,rgba(28,14,4,.76) 52%,rgba(4,2,0,.97) 100%),repeating-linear-gradient(0deg,transparent,transparent 12px,rgba(80,45,12,.048) 12px,rgba(80,45,12,.048) 13px),linear-gradient(180deg,#040200 0%,#0c0602 100%)`},
-    {w:365,h:196,label:'recorrido · márgenes',
-     bg:`radial-gradient(ellipse 90% 35% at 50% 55%,rgba(55,28,8,.5) 0%,rgba(22,10,2,.7) 55%,rgba(3,1,0,.97) 100%),linear-gradient(180deg,#030100 0%,#0a0501 100%)`},
-    {w:230,h:320,label:'infraestructura · ciudad',
-     bg:`radial-gradient(ellipse 38% 70% at 45% 40%,rgba(60,32,10,.54) 0%,rgba(25,12,3,.74) 50%,rgba(3,1,0,.97) 100%),linear-gradient(150deg,#030100 0%,#0b0602 100%)`},
-    {w:280,h:280,label:'tunel · rata',
-     bg:`radial-gradient(ellipse 30% 30% at 50% 50%,rgba(75,40,14,.62) 0%,rgba(32,16,4,.78) 48%,rgba(4,2,0,.97) 100%),repeating-linear-gradient(0deg,transparent,transparent 8px,rgba(90,50,10,.04) 8px,rgba(90,50,10,.04) 9px),repeating-linear-gradient(90deg,transparent,transparent 8px,rgba(90,50,10,.03) 8px,rgba(90,50,10,.03) 9px),linear-gradient(180deg,#030100 0%,#0c0602 100%)`},
-    {w:340,h:202,label:'Festival de las Ideas · Madrid',
-     bg:`radial-gradient(ellipse 75% 45% at 30% 55%,rgba(58,30,10,.52) 0%,rgba(24,11,2,.70) 54%,rgba(3,1,0,.97) 100%),linear-gradient(165deg,#030100 0%,#0a0501 100%)`},
-    {w:218,h:332,label:'cuerpo-cámara · extensión',
-     bg:`radial-gradient(ellipse 42% 68% at 46% 36%,rgba(62,34,11,.56) 0%,rgba(26,12,3,.74) 50%,rgba(3,1,0,.97) 100%),repeating-linear-gradient(0deg,transparent,transparent 10px,rgba(85,48,12,.045) 10px,rgba(85,48,12,.045) 11px),linear-gradient(155deg,#030100 0%,#0b0601 100%)`},
-    {w:420,h:188,label:'márgenes · invisibles',
-     bg:`radial-gradient(ellipse 92% 40% at 50% 65%,rgba(48,26,8,.46) 0%,rgba(20,9,2,.66) 55%,rgba(2,1,0,.97) 100%),linear-gradient(180deg,#020100 0%,#090401 100%)`},
-  ],
-  recursos:[
-    {w:365,h:198,label:'espacio de trabajo',
-     bg:`radial-gradient(ellipse 75% 50% at 55% 55%,rgba(85,65,18,.5) 0%,rgba(38,28,6,.68) 52%,rgba(5,4,0,.97) 100%),repeating-linear-gradient(0deg,transparent,transparent 18px,rgba(120,95,25,.048) 18px,rgba(120,95,25,.048) 19px),repeating-linear-gradient(90deg,transparent,transparent 18px,rgba(120,95,25,.036) 18px,rgba(120,95,25,.036) 19px),linear-gradient(180deg,#050401 0%,#0e0c02 100%)`},
-    {w:240,h:318,label:'cuerpo · archivo',
-     bg:`radial-gradient(ellipse 42% 65% at 48% 35%,rgba(90,70,20,.52) 0%,rgba(40,30,6,.7) 50%,rgba(5,4,1,.97) 100%),linear-gradient(170deg,#050401 0%,#0e0c02 100%)`},
-    {w:300,h:215,label:'formulario · repetición',
-     bg:`radial-gradient(ellipse 65% 45% at 50% 60%,rgba(75,58,15,.48) 0%,rgba(32,24,4,.68) 55%,rgba(4,3,0,.97) 100%),repeating-linear-gradient(0deg,transparent,transparent 14px,rgba(110,85,18,.055) 14px,rgba(110,85,18,.055) 15px),linear-gradient(180deg,#040300 0%,#0c0a01 100%)`},
-    {w:275,h:275,label:'escritorio · eficiencia',
-     bg:`radial-gradient(ellipse 55% 55% at 50% 50%,rgba(80,62,16,.5) 0%,rgba(35,26,5,.68) 52%,rgba(4,3,0,.97) 100%),repeating-linear-gradient(0deg,transparent,transparent 16px,rgba(115,90,22,.042) 16px,rgba(115,90,22,.042) 17px),repeating-linear-gradient(90deg,transparent,transparent 16px,rgba(115,90,22,.034) 16px,rgba(115,90,22,.034) 17px),linear-gradient(180deg,#050401 0%,#0d0b01 100%)`},
-    {w:400,h:186,label:'automatización · fatiga',
-     bg:`radial-gradient(ellipse 85% 42% at 50% 58%,rgba(70,54,14,.46) 0%,rgba(30,22,4,.64) 54%,rgba(4,3,0,.97) 100%),linear-gradient(180deg,#040300 0%,#0b0901 100%)`},
-    {w:222,h:335,label:'gesto · mínimo',
-     bg:`radial-gradient(ellipse 44% 68% at 44% 32%,rgba(88,68,18,.52) 0%,rgba(38,28,5,.70) 50%,rgba(5,4,1,.97) 100%),repeating-linear-gradient(0deg,transparent,transparent 12px,rgba(118,92,20,.05) 12px,rgba(118,92,20,.05) 13px),linear-gradient(155deg,#050401 0%,#0d0b02 100%)`},
-    {w:415,h:192,label:'ficción · organizacional',
-     bg:`radial-gradient(ellipse 90% 44% at 48% 65%,rgba(65,50,12,.44) 0%,rgba(28,20,3,.62) 55%,rgba(3,2,0,.97) 100%),repeating-linear-gradient(90deg,transparent,transparent 20px,rgba(105,82,18,.04) 20px,rgba(105,82,18,.04) 21px),linear-gradient(180deg,#040300 0%,#0a0800 100%)`},
-  ],
-  deposito:[
-    {w:335,h:212,label:'depósito · vista general',
-     bg:`radial-gradient(ellipse 65% 55% at 50% 50%,rgba(8,75,65,.55) 0%,rgba(3,30,25,.72) 52%,rgba(0,4,3,.97) 100%),repeating-linear-gradient(0deg,transparent,transparent 28px,rgba(0,100,80,.045) 28px,rgba(0,100,80,.045) 29px),repeating-linear-gradient(90deg,transparent,transparent 28px,rgba(0,100,80,.036) 28px,rgba(0,100,80,.036) 29px),linear-gradient(180deg,#000403 0%,#000c0a 100%)`},
-    {w:250,h:322,label:'objeto · valor ambiguo',
-     bg:`radial-gradient(ellipse 45% 60% at 48% 40%,rgba(6,65,55,.55) 0%,rgba(2,25,20,.73) 50%,rgba(0,3,2,.97) 100%),linear-gradient(155deg,#000403 0%,#000c08 100%)`},
-    {w:395,h:198,label:'acumulación · museo',
-     bg:`radial-gradient(ellipse 85% 40% at 50% 60%,rgba(5,60,50,.47) 0%,rgba(2,22,18,.66) 55%,rgba(0,3,2,.97) 100%),linear-gradient(180deg,#000302 0%,#000a07 100%)`},
-    {w:272,h:272,label:'residuo · archivo',
-     bg:`radial-gradient(ellipse 58% 58% at 50% 50%,rgba(7,70,60,.52) 0%,rgba(2,28,22,.70) 52%,rgba(0,4,3,.97) 100%),repeating-linear-gradient(0deg,transparent,transparent 24px,rgba(0,95,76,.042) 24px,rgba(0,95,76,.042) 25px),repeating-linear-gradient(90deg,transparent,transparent 24px,rgba(0,95,76,.034) 24px,rgba(0,95,76,.034) 25px),linear-gradient(180deg,#000403 0%,#000b09 100%)`},
-    {w:318,h:200,label:'backstage · material',
-     bg:`radial-gradient(ellipse 68% 50% at 38% 52%,rgba(6,68,58,.50) 0%,rgba(2,26,21,.70) 52%,rgba(0,3,2,.97) 100%),linear-gradient(160deg,#000403 0%,#000b08 100%)`},
-    {w:228,h:335,label:'zona de transición',
-     bg:`radial-gradient(ellipse 45% 68% at 52% 36%,rgba(5,58,48,.54) 0%,rgba(1,22,18,.73) 50%,rgba(0,3,2,.97) 100%),repeating-linear-gradient(0deg,transparent,transparent 18px,rgba(0,88,70,.04) 18px,rgba(0,88,70,.04) 19px),linear-gradient(150deg,#000302 0%,#000a07 100%)`},
-    {w:410,h:190,label:'inauguración · García Uriburu',
-     bg:`radial-gradient(ellipse 90% 42% at 50% 63%,rgba(4,55,46,.44) 0%,rgba(1,20,16,.62) 55%,rgba(0,2,2,.97) 100%),linear-gradient(180deg,#000302 0%,#000907 100%)`},
-  ],
-  masculinidades:[
-    {w:320,h:215,label:'dispositivo · escena',
-     bg:`radial-gradient(ellipse 55% 60% at 50% 45%,rgba(90,8,8,.65) 0%,rgba(42,3,3,.75) 48%,rgba(6,0,0,.97) 100%),linear-gradient(180deg,#060000 0%,#0e0101 100%)`},
-    {w:230,h:320,label:'pedagogía · cuerpo',
-     bg:`radial-gradient(ellipse 40% 70% at 48% 32%,rgba(80,6,6,.6) 0%,rgba(36,2,2,.74) 50%,rgba(5,0,0,.97) 100%),linear-gradient(150deg,#050000 0%,#0c0000 100%)`},
-    {w:390,h:198,label:'colaboración · espacio',
-     bg:`radial-gradient(ellipse 80% 45% at 50% 58%,rgba(75,6,6,.52) 0%,rgba(32,2,2,.68) 55%,rgba(4,0,0,.97) 100%),repeating-linear-gradient(135deg,transparent,transparent 20px,rgba(120,8,8,.038) 20px,rgba(120,8,8,.038) 21px),linear-gradient(180deg,#050000 0%,#0b0101 100%)`},
-    {w:268,h:268,label:'crueldad · estructura',
-     bg:`radial-gradient(ellipse 52% 52% at 50% 50%,rgba(85,7,7,.60) 0%,rgba(38,2,2,.72) 48%,rgba(5,0,0,.97) 100%),repeating-linear-gradient(0deg,transparent,transparent 22px,rgba(110,6,6,.04) 22px,rgba(110,6,6,.04) 23px),linear-gradient(180deg,#050000 0%,#0d0000 100%)`},
-    {w:345,h:202,label:'Ana Segovia · Uruguay / México',
-     bg:`radial-gradient(ellipse 70% 48% at 32% 48%,rgba(82,7,7,.56) 0%,rgba(34,2,2,.70) 52%,rgba(5,0,0,.97) 100%),linear-gradient(162deg,#040000 0%,#0c0000 100%)`},
-    {w:218,h:338,label:'género · cotidiano',
-     bg:`radial-gradient(ellipse 44% 66% at 52% 34%,rgba(78,6,6,.58) 0%,rgba(34,1,1,.73) 50%,rgba(4,0,0,.97) 100%),repeating-linear-gradient(135deg,transparent,transparent 16px,rgba(105,5,5,.04) 16px,rgba(105,5,5,.04) 17px),linear-gradient(155deg,#040000 0%,#0b0000 100%)`},
-    {w:415,h:190,label:'sensible · político · cotidiano',
-     bg:`radial-gradient(ellipse 88% 42% at 50% 62%,rgba(68,5,5,.48) 0%,rgba(28,1,1,.64) 55%,rgba(3,0,0,.97) 100%),linear-gradient(180deg,#040000 0%,#0a0000 100%)`},
-  ],
+const TOPOLOGIA = {
+  name:'Topología de una rata en P.O.V.',year:'2025',type:'Videoperformance',
+  desc:'Una aproximación en primera persona —point of view— a los recorridos invisibles, las infraestructuras subterráneas y los márgenes de la ciudad. La cámara como extensión del cuerpo: el dispositivo como forma de habitar el espacio desde adentro. Realizada para el cierre del Festival de las Ideas de Madrid.',
+  loc:'Festival de las Ideas, Madrid — Mayo 2025'
 };
 
-/* ─── CLOCK ─── */
+const COLABS = [
+  { em:'💡', name:'El Cubo', year:'Montevideo · 2021',
+    desc:'Un aro de luz etérea se eleva del suelo lentamente. A cada centímetro que se eleva, una figura femenina se va revelando, se esculpe con la luz, como dentro de una impresora 3D futurista. Cuando el halo de luz ya ilumina su coronilla, la chica androide da su primer respiro: ve y siente el mundo por primera vez. Propuesta que recupera y actualiza un imaginario retrofuturista sobre la hibridación humano-máquina. La pieza gira en torno a una escultura cinética que utiliza un sistema de poleas y la técnica del LED mapping para generar un contexto y diálogo con la bailarina Noelia Hernández.' },
+  { em:'🐎', name:'Gambola', year:'Maldonado · 2026',
+    desc:'Performer para la activación de la exposición "The Office of Inter-American Affairs Presents: Uruguay" de la pintora mexicana Ana Segovia. Doce cuerpos masculinos, fragmentados por el encuadre —el telón del escenario bajado dejando al descubierto solo un tercio del mismo— exploran coreográficamente la fuerza, la violencia y la seducción donde el repiqueteo de las botas de los gauchos genera un elemento auditivo determinante. Cuando la acción termina, queda el vacío, los restos, el sonido como fantasma. El fuera de campo —ese espacio que el cine suele ocultar— se vuelve protagonista. 14 funciones en la semana del Arte de Punta del Este.' },
+  { em:'🔥', name:'Burn Out', year:'Montevideo · 2023',
+    desc:'Pieza escénica construida en torno al mundo de la oficina y la creciente exigencia de tareas y volumen del trabajo. Ya no es el hombre utilizando una máquina para facilitar el trabajo, sino el ser humano corriendo y tratando de alcanzar los tiempos impuestos por las nuevas tecnologías. La saturación y aceleración como signos de nuestro presente. Presentada dentro del ciclo Noche de Performance de Pensión Cultural Milán.' }
+];
+
+/* ─── PHOTO DATA (desktop only) ─── */
+function phBg(c1,c2,d){return`radial-gradient(ellipse 60% 65% at 50% 40%,${c1} 0%,${c2} 48%,${d} 100%),linear-gradient(180deg,${d} 0%,${d} 100%)`;}
+const PHOTO_DATA={
+  jardin:[{w:340,h:210,label:'instalación · Goes',bg:phBg('rgba(40,110,40,.55)','rgba(10,40,15,.72)','#020c04')},{w:235,h:305,label:'detalle vegetal',bg:phBg('rgba(60,140,50,.5)','rgba(15,50,15,.76)','#020c04')},{w:395,h:198,label:'espacio · luz',bg:phBg('rgba(30,90,35,.44)','rgba(8,30,10,.66)','#010a03')},{w:272,h:272,label:'plano cenital',bg:phBg('rgba(50,120,45,.48)','rgba(12,44,14,.70)','#020c04')},{w:310,h:185,label:'proceso · montaje',bg:phBg('rgba(45,115,40,.52)','rgba(10,38,12,.74)','#020b03')},{w:220,h:318,label:'cuerpo · jardín',bg:phBg('rgba(35,100,35,.5)','rgba(8,32,10,.73)','#010a03')},{w:420,h:192,label:'vista final',bg:phBg('rgba(28,85,32,.42)','rgba(7,26,9,.64)','#010903')}],
+  ciborga:[{w:330,h:205,label:'performance · CBA',bg:phBg('rgba(25,75,140,.55)','rgba(8,28,58,.72)','#01040c')},{w:245,h:315,label:'cuerpo · tecnología',bg:phBg('rgba(20,65,130,.6)','rgba(6,22,52,.73)','#01040b')},{w:400,h:192,label:'espacio · escena',bg:phBg('rgba(18,60,120,.44)','rgba(5,20,48,.65)','#01040b')},{w:275,h:275,label:'cotidiano · cyborg',bg:phBg('rgba(22,70,135,.5)','rgba(7,24,55,.70)','#01040c')},{w:315,h:200,label:'apertura ciclo 2024',bg:phBg('rgba(18,58,125,.56)','rgba(5,18,50,.72)','#01030b')},{w:222,h:325,label:'ecosistema mediado',bg:phBg('rgba(15,55,115,.58)','rgba(4,16,45,.73)','#010409')},{w:405,h:186,label:'presencia · activación',bg:phBg('rgba(16,52,110,.42)','rgba(4,15,42,.62)','#010308')}],
+  recursos:[{w:365,h:198,label:'espacio de trabajo',bg:phBg('rgba(85,65,18,.5)','rgba(38,28,6,.68)','#050401')},{w:240,h:318,label:'cuerpo · archivo',bg:phBg('rgba(90,70,20,.52)','rgba(40,30,6,.7)','#050401')},{w:300,h:215,label:'formulario · repetición',bg:phBg('rgba(75,58,15,.48)','rgba(32,24,4,.68)','#040300')},{w:275,h:275,label:'escritorio',bg:phBg('rgba(80,62,16,.5)','rgba(35,26,5,.68)','#050401')},{w:400,h:186,label:'automatización · fatiga',bg:phBg('rgba(70,54,14,.46)','rgba(30,22,4,.64)','#040300')},{w:222,h:335,label:'gesto · mínimo',bg:phBg('rgba(88,68,18,.52)','rgba(38,28,5,.70)','#050401')},{w:415,h:192,label:'ficción organizacional',bg:phBg('rgba(65,50,12,.44)','rgba(28,20,3,.62)','#040300')}],
+  quierescopia:[{w:300,h:205,label:'papel termosensible',bg:phBg('rgba(160,155,180,.45)','rgba(70,65,90,.65)','#0c0c14')},{w:230,h:310,label:'detalle · latente',bg:phBg('rgba(140,138,165,.4)','rgba(60,58,80,.68)','#0a0a12')},{w:380,h:195,label:'accidentes · CBA',bg:phBg('rgba(150,148,175,.42)','rgba(65,62,88,.66)','#0b0b13')},{w:265,h:265,label:'copia · original',bg:phBg('rgba(145,142,170,.38)','rgba(62,60,84,.64)','#0a0a12')},{w:320,h:188,label:'materialidad digital',bg:phBg('rgba(155,152,178,.4)','rgba(68,65,90,.62)','#0c0c14')},{w:215,h:320,label:'nostalgia anticipada',bg:phBg('rgba(138,135,162,.38)','rgba(58,56,78,.66)','#0a0a12')},{w:400,h:188,label:'semana de la moda',bg:phBg('rgba(148,145,172,.36)','rgba(62,60,82,.62)','#0b0b13')}],
+  tecnorituales:[{w:330,h:205,label:'performance grupal',bg:phBg('rgba(40,120,50,.5)','rgba(12,50,18,.72)','#060e06')},{w:240,h:315,label:'cuerpo · ritual',bg:phBg('rgba(35,110,45,.48)','rgba(10,44,16,.74)','#050d05')},{w:395,h:195,label:'terraza · CCE',bg:phBg('rgba(45,130,55,.46)','rgba(14,56,20,.70)','#060e06')},{w:270,h:270,label:'visuales analógicos',bg:phBg('rgba(38,115,48,.44)','rgba(11,48,17,.72)','#050d05')},{w:310,h:190,label:'futuro · presente',bg:phBg('rgba(42,122,52,.46)','rgba(12,52,18,.70)','#060e06')},{w:218,h:330,label:'tecnología · naturaleza',bg:phBg('rgba(36,108,46,.44)','rgba(10,44,16,.72)','#050d05')},{w:415,h:190,label:'Byung-Chul Han',bg:phBg('rgba(40,118,50,.42)','rgba(11,46,17,.68)','#060d06')}],
+  deposito:[{w:335,h:212,label:'depósito · general',bg:phBg('rgba(8,75,65,.55)','rgba(3,30,25,.72)','#000403')},{w:250,h:322,label:'archivo · agua',bg:phBg('rgba(6,65,55,.55)','rgba(2,25,20,.73)','#000403')},{w:395,h:198,label:'acumulación · museo',bg:phBg('rgba(5,60,50,.47)','rgba(2,22,18,.66)','#000302')},{w:272,h:272,label:'residuo · archivo',bg:phBg('rgba(7,70,60,.52)','rgba(2,28,22,.70)','#000403')},{w:318,h:200,label:'cajones · móviles',bg:phBg('rgba(6,68,58,.50)','rgba(2,26,21,.70)','#000403')},{w:228,h:335,label:'zona de transición',bg:phBg('rgba(5,58,48,.54)','rgba(1,22,18,.73)','#000302')},{w:410,h:190,label:'inauguración · Uriburu',bg:phBg('rgba(4,55,46,.44)','rgba(1,20,16,.62)','#000302')}],
+  colaboraciones:[{w:295,h:205,label:'El Cubo · LED mapping',bg:phBg('rgba(200,180,60,.45)','rgba(80,65,15,.68)','#0c0a00')},{w:225,h:305,label:'Gambola · performance',bg:phBg('rgba(160,100,40,.48)','rgba(65,35,10,.70)','#0a0600')},{w:380,h:192,label:'Burn Out · escena',bg:phBg('rgba(180,40,20,.50)','rgba(70,12,6,.68)','#0e0200')},{w:260,h:260,label:'colaboración · Segovia',bg:phBg('rgba(155,95,38,.44)','rgba(60,32,8,.70)','#090500')},{w:315,h:188,label:'cuerpo · acción',bg:phBg('rgba(170,110,45,.46)','rgba(68,40,12,.68)','#0a0600')},{w:215,h:315,label:'espacio · vacío',bg:phBg('rgba(145,85,30,.42)','rgba(55,28,7,.68)','#080500')},{w:400,h:186,label:'proceso · colaborativo',bg:phBg('rgba(162,98,38,.42)','rgba(62,34,9,.66)','#090500')}],
+};
+
+/* ════════════════════════════════════════════
+   SHARED UTILS
+════════════════════════════════════════════ */
+const isMobile = ()=>window.innerWidth<=680;
+
+/* ════════════════════════════════════════════
+   DESKTOP ENGINE
+════════════════════════════════════════════ */
+let wZ=100;
+const WINS={},DTIMERS={},PHOTO_TIMERS={};
+let calcDisp='0',cE='',cR=false;
+
 function tick(){
   const n=new Date();
-  const t=n.toLocaleTimeString('es-UY',{hour:'2-digit',minute:'2-digit'});
-  const d=n.toLocaleDateString('es-UY',{weekday:'short',day:'numeric',month:'short'});
-  document.getElementById('tb-clock').innerHTML=t+'<br>'+d;
+  const ts=n.toLocaleTimeString('es-UY',{hour:'2-digit',minute:'2-digit'});
+  const ds=n.toLocaleDateString('es-UY',{weekday:'short',day:'numeric',month:'short'});
+  const cl=document.getElementById('tb-clock');if(cl)cl.innerHTML=ts+'<br>'+ds;
+  const ms=document.getElementById('mob-time-s');if(ms)ms.textContent=ts;
 }
 tick();setInterval(tick,1000);
 
-/* ─── FOLDER SVG ─── */
 function folderSVG(fc,ft){
-  return`<div class="folder-body" style="background:${fc};border:1px solid ${fc === ft ? fc : ft}80;"></div>`+
-    `<div class="folder-tab" style="background:${ft};border:1px solid ${ft}80;"></div>`;
+  return`<div class="folder-body" style="background:${fc};border:1px solid ${ft}80"></div>`+
+    `<div class="folder-tab" style="background:${ft};border:1px solid ${ft}80"></div>`;
 }
 
-/* ─── WALLPAPER ─── */
+/* ── Wallpaper ── */
 function createWallpaper(){
   const desk=document.getElementById('desktop');
+  if(WALLPAPER_FILE){
+    const ext=WALLPAPER_FILE.split('.').pop().toLowerCase();
+    if(['gif','png','jpg','jpeg','webp'].includes(ext)){
+      const img=document.createElement('img');img.id='wp-base';img.src=WALLPAPER_FILE;
+      img.style.cssText='position:absolute;inset:0;width:100%;height:100%;z-index:0;object-fit:cover;';
+      desk.insertBefore(img,desk.firstChild);
+    }else{
+      const vid=document.createElement('video');vid.id='wp-base';vid.autoplay=true;vid.loop=true;vid.muted=true;vid.playsInline=true;
+      vid.style.cssText='position:absolute;inset:0;width:100%;height:100%;z-index:0;object-fit:cover;';
+      vid.innerHTML=`<source src="${WALLPAPER_FILE}">`;desk.insertBefore(vid,desk.firstChild);
+    }
+    return;
+  }
   const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
-  svg.id='wp-base';
-  svg.setAttribute('viewBox','0 0 1440 900');
-  svg.setAttribute('preserveAspectRatio','xMidYMid slice');
-  svg.setAttribute('xmlns','http://www.w3.org/2000/svg');
+  svg.id='wp-base';svg.setAttribute('viewBox','0 0 1440 900');svg.setAttribute('preserveAspectRatio','xMidYMid slice');
+  svg.style.cssText='position:absolute;inset:0;width:100%;height:100%;z-index:0;';
   svg.innerHTML=`<defs>
     <linearGradient id="gSky" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%"   stop-color="#0f52a0"/>
-      <stop offset="28%"  stop-color="#2272cc"/>
-      <stop offset="58%"  stop-color="#4898e8"/>
-      <stop offset="78%"  stop-color="#72c0f4"/>
-      <stop offset="100%" stop-color="#96d4f8"/>
+      <stop offset="0%" stop-color="#0f52a0"/><stop offset="28%" stop-color="#2272cc"/>
+      <stop offset="58%" stop-color="#4898e8"/><stop offset="78%" stop-color="#72c0f4"/><stop offset="100%" stop-color="#96d4f8"/>
     </linearGradient>
     <linearGradient id="gHill" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%"   stop-color="#60d84e"/>
-      <stop offset="18%"  stop-color="#4eba3c"/>
-      <stop offset="42%"  stop-color="#349030"/>
-      <stop offset="68%"  stop-color="#1e6420"/>
-      <stop offset="100%" stop-color="#0e3c10"/>
+      <stop offset="0%" stop-color="#60d84e"/><stop offset="18%" stop-color="#4eba3c"/>
+      <stop offset="42%" stop-color="#349030"/><stop offset="68%" stop-color="#1e6420"/><stop offset="100%" stop-color="#0e3c10"/>
     </linearGradient>
     <filter id="fA" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="14"/></filter>
     <filter id="fB" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="6"/></filter>
     <pattern id="scan" x="0" y="0" width="1440" height="4" patternUnits="userSpaceOnUse">
-      <rect width="1440" height="3" fill="transparent"/>
-      <rect y="3" width="1440" height="1" fill="rgba(0,0,0,0.026)"/>
+      <rect width="1440" height="3" fill="transparent"/><rect y="3" width="1440" height="1" fill="rgba(0,0,0,.026)"/>
     </pattern>
     <radialGradient id="gVign" cx="50%" cy="50%" r="72%">
-      <stop offset="0%"   stop-color="rgba(0,0,0,0)"/>
-      <stop offset="80%"  stop-color="rgba(0,0,0,0.07)"/>
-      <stop offset="100%" stop-color="rgba(0,0,0,0.32)"/>
+      <stop offset="0%" stop-color="rgba(0,0,0,0)"/><stop offset="80%" stop-color="rgba(0,0,0,.07)"/>
+      <stop offset="100%" stop-color="rgba(0,0,0,.32)"/>
     </radialGradient>
     <radialGradient id="gHaze" cx="54%" cy="100%" r="52%">
-      <stop offset="0%"   stop-color="rgba(196,232,255,0.30)"/>
-      <stop offset="100%" stop-color="rgba(196,232,255,0)"/>
+      <stop offset="0%" stop-color="rgba(196,232,255,.30)"/><stop offset="100%" stop-color="rgba(196,232,255,0)"/>
     </radialGradient>
   </defs>
-
   <rect width="1440" height="900" fill="url(#gSky)"/>
   <ellipse cx="760" cy="505" rx="630" ry="145" fill="url(#gHaze)"/>
-
-  <!-- Cloud 1 — main, right of centre -->
-  <g filter="url(#fA)" opacity="0.78">
-    <ellipse cx="862" cy="204" rx="152" ry="66" fill="white"/>
-    <ellipse cx="920" cy="178" rx="106" ry="54" fill="white"/>
-    <ellipse cx="804" cy="192" rx="94"  ry="48" fill="white"/>
-    <ellipse cx="864" cy="162" rx="76"  ry="40" fill="white"/>
-  </g>
-  <g filter="url(#fB)" opacity="0.60">
-    <ellipse cx="862" cy="198" rx="118" ry="50" fill="white"/>
-    <ellipse cx="916" cy="172" rx="84"  ry="42" fill="white"/>
-    <ellipse cx="808" cy="186" rx="74"  ry="36" fill="white"/>
-  </g>
-  <ellipse cx="862" cy="194" rx="98"  ry="42" fill="rgba(255,255,255,0.66)"/>
-  <ellipse cx="914" cy="170" rx="74"  ry="36" fill="rgba(255,255,255,0.70)"/>
-  <ellipse cx="810" cy="183" rx="66"  ry="30" fill="rgba(255,255,255,0.58)"/>
-  <ellipse cx="862" cy="156" rx="52"  ry="26" fill="rgba(255,255,255,0.78)"/>
-  <ellipse cx="860" cy="150" rx="36"  ry="20" fill="rgba(255,255,255,0.90)"/>
-  <ellipse cx="862" cy="224" rx="110" ry="18" fill="rgba(150,175,210,0.16)"/>
-
-  <!-- Cloud 2 — left, smaller -->
-  <g filter="url(#fA)" opacity="0.60">
-    <ellipse cx="292" cy="148" rx="96"  ry="40" fill="white"/>
-    <ellipse cx="336" cy="130" rx="64"  ry="32" fill="white"/>
-    <ellipse cx="266" cy="140" rx="58"  ry="28" fill="white"/>
-  </g>
-  <g filter="url(#fB)" opacity="0.50">
-    <ellipse cx="294" cy="144" rx="76"  ry="32" fill="white"/>
-    <ellipse cx="334" cy="127" rx="52"  ry="26" fill="white"/>
-  </g>
-  <ellipse cx="294" cy="142" rx="62"  ry="26" fill="rgba(255,255,255,0.58)"/>
-  <ellipse cx="332" cy="125" rx="44"  ry="21" fill="rgba(255,255,255,0.64)"/>
-  <ellipse cx="270" cy="137" rx="40"  ry="18" fill="rgba(255,255,255,0.50)"/>
-  <ellipse cx="293" cy="118" rx="30"  ry="17" fill="rgba(255,255,255,0.70)"/>
-
-  <!-- Cloud 3 — right, wispy -->
-  <g filter="url(#fA)" opacity="0.34">
-    <ellipse cx="1188" cy="170" rx="124" ry="34" fill="white"/>
-    <ellipse cx="1218" cy="156" rx="82"  ry="24" fill="white"/>
-  </g>
-  <ellipse cx="1188" cy="166" rx="92"  ry="22" fill="rgba(255,255,255,0.34)"/>
-  <ellipse cx="1216" cy="154" rx="60"  ry="16" fill="rgba(255,255,255,0.38)"/>
-
-  <!-- Hill — Bliss silhouette -->
+  <g filter="url(#fA)" opacity=".78"><ellipse cx="862" cy="204" rx="152" ry="66" fill="white"/>
+    <ellipse cx="920" cy="178" rx="106" ry="54" fill="white"/><ellipse cx="804" cy="192" rx="94" ry="48" fill="white"/>
+    <ellipse cx="864" cy="162" rx="76" ry="40" fill="white"/></g>
+  <g filter="url(#fB)" opacity=".60"><ellipse cx="862" cy="198" rx="118" ry="50" fill="white"/>
+    <ellipse cx="916" cy="172" rx="84" ry="42" fill="white"/><ellipse cx="808" cy="186" rx="74" ry="36" fill="white"/></g>
+  <ellipse cx="862" cy="194" rx="98" ry="42" fill="rgba(255,255,255,.66)"/>
+  <ellipse cx="914" cy="170" rx="74" ry="36" fill="rgba(255,255,255,.70)"/>
+  <ellipse cx="860" cy="150" rx="36" ry="20" fill="rgba(255,255,255,.90)"/>
+  <g filter="url(#fA)" opacity=".60"><ellipse cx="292" cy="148" rx="96" ry="40" fill="white"/>
+    <ellipse cx="336" cy="130" rx="64" ry="32" fill="white"/><ellipse cx="266" cy="140" rx="58" ry="28" fill="white"/></g>
+  <ellipse cx="294" cy="142" rx="62" ry="26" fill="rgba(255,255,255,.58)"/>
+  <ellipse cx="332" cy="125" rx="44" ry="21" fill="rgba(255,255,255,.64)"/>
+  <ellipse cx="293" cy="118" rx="30" ry="17" fill="rgba(255,255,255,.70)"/>
   <path d="M0,578 C60,572 160,516 280,454 C370,404 448,358 530,336 C580,322 618,322 655,334 C700,350 736,384 772,418 C800,444 824,466 852,480 C890,498 930,490 976,464 C1030,432 1100,392 1190,370 C1280,348 1366,390 1440,436 L1440,900 L0,900 Z" fill="url(#gHill)"/>
-
-  <!-- Hill self-shadow on downslope -->
-  <path d="M530,336 C580,322 618,322 655,334 C700,350 736,384 772,418 C800,444 824,466 852,480 C890,498 930,490 976,464 L976,492 C930,518 890,526 852,506 C824,492 800,470 772,444 C736,410 700,376 655,360 C618,348 580,348 530,362 Z" fill="rgba(0,0,0,0.058)"/>
-
-  <!-- Scan lines -->
   <rect width="1440" height="900" fill="url(#scan)"/>
-
-  <!-- Vignette -->
-  <rect width="1440" height="900" fill="url(#gVign)"/>
-
-  <!-- Slight blue cast in upper sky — screen colour temperature -->
-  <rect width="1440" height="220" fill="rgba(0,15,55,0.04)"/>`;
-
-  desk.insertBefore(svg, desk.firstChild);
+  <rect width="1440" height="900" fill="url(#gVign)"/>`;
+  desk.insertBefore(svg,desk.firstChild);
 }
 
-/* ─── RENDER ICONS ─── */
-function mkIcon(proj){
-  const d=document.createElement('div');
-  d.className='dicon';d.id='ic-'+proj.id;
-  d.innerHTML=
-    `<div class="dicon-fig">${folderSVG(proj.fc,proj.ft)}<div class="dicon-em">${proj.em}</div></div>`+
-    `<svg class="ring-svg" viewBox="0 0 52 46"><circle cx="26" cy="23" r="22"/></svg>`+
-    `<div class="dicon-label">${proj.name}</div>`;
+/* ── Preview hover ── */
+function showPrev(p){
+  if(!p.pw)return;
+  const hp=document.getElementById('hp'),wpov=document.getElementById('wp-ov');if(!hp||!wpov)return;
+  hp.style.width=p.pw+'px';hp.style.height=p.ph+'px';hp.style.background=p.prevBg;
+  hp.querySelector('.hp-fname').textContent=p.name;hp.querySelector('.hp-ftype').textContent=p.type;
+  const dW=document.getElementById('desktop').offsetWidth,dH=document.getElementById('desktop').offsetHeight;
+  hp.style.left=Math.max(104,104+Math.random()*(dW-p.pw-18-104))+'px';
+  hp.style.top=Math.max(18,18+Math.random()*(dH-p.ph-36))+'px';
+  hp.classList.add('vis');if(p.wpBg){wpov.style.background=p.wpBg;wpov.classList.add('vis');}
+}
+function hidePrev(){
+  document.getElementById('hp').classList.remove('vis');
+  document.getElementById('wp-ov').classList.remove('vis');
+}
 
-  d.addEventListener('dblclick',()=>{openProject(proj);clearT(proj.id);hidePrev();});
-  d.addEventListener('mouseenter',()=>{
-    d.classList.add('pulse','counting');
-    showPrev(proj);
-    TIMERS[proj.id]=setTimeout(()=>{
-      WINS[proj.id]?focusW(proj.id):openProject(proj);
-      d.classList.remove('counting');
-      hidePrev();
-    },30000);
-  });
-  d.addEventListener('mouseleave',()=>{clearT(proj.id);d.classList.remove('pulse','counting');hidePrev();});
+/* ── Desktop icons ── */
+function mkIc(p){
+  const d=document.createElement('div');d.className='dicon';d.id='ic-'+p.id;
+  d.innerHTML=`<div class="dicon-fig">${folderSVG(p.fc,p.ft)}<div class="dicon-em">${p.em}</div></div>`+
+    `<svg class="ring-svg" viewBox="0 0 52 46"><circle cx="26" cy="23" r="22"/></svg>`+
+    `<div class="dicon-label">${p.name}</div>`;
   return d;
 }
+function clearDT(id){if(DTIMERS[id]){clearTimeout(DTIMERS[id]);delete DTIMERS[id];}}
 
-function renderIcons(){
+function renderDesktop(){
   const desk=document.getElementById('desktop');
-
-  /* wallpaper overlay layer */
-  const wpov=document.createElement('div');
-  wpov.id='wp-ov';
-  desk.appendChild(wpov);
-
-  /* hover preview card */
-  const hp=document.createElement('div');
-  hp.id='hp';
+  const wpov=document.createElement('div');wpov.id='wp-ov';desk.appendChild(wpov);
+  const hp=document.createElement('div');hp.id='hp';
   hp.innerHTML=`<div class="hp-footer"><div class="hp-fname"></div><div class="hp-ftype"></div></div>`;
   desk.appendChild(hp);
+  const wrap=document.createElement('div');wrap.id='icons';
 
-  const wrap=document.createElement('div');
-  wrap.id='icons';
-
-  /* bio icon */
-  const bio=document.createElement('div');
-  bio.className='dicon';bio.id='ic-bio';
-  bio.innerHTML=
-    `<div class="dicon-fig"><div class="folder-body" style="background:#1a2a20;border:1px solid #1a2a2080;"></div>`+
-    `<div class="folder-tab" style="background:#141e18;border:1px solid #141e1880;"></div>`+
-    `<div class="dicon-em">◻</div></div>`+
-    `<svg class="ring-svg" viewBox="0 0 52 46"><circle cx="26" cy="23" r="22"/></svg>`+
-    `<div class="dicon-label">Martín F. Navarro</div>`;
+  const bio=mkIc({id:'bio',em:'◻',fc:'#1a2a20',ft:'#141e18',name:'Martín F. Navarro'});
   bio.addEventListener('dblclick',openBio);
-  bio.addEventListener('mouseenter',()=>{bio.classList.add('pulse','counting');TIMERS['bio']=setTimeout(()=>{openBio();bio.classList.remove('counting');},30000);});
-  bio.addEventListener('mouseleave',()=>{clearT('bio');bio.classList.remove('pulse','counting');});
+  bio.addEventListener('mouseenter',()=>{bio.classList.add('pulse','counting');DTIMERS.bio=setTimeout(()=>{openBio();bio.classList.remove('counting');},30000);});
+  bio.addEventListener('mouseleave',()=>{clearDT('bio');bio.classList.remove('pulse','counting');});
   wrap.appendChild(bio);
 
-  PROJECTS.forEach(p=>wrap.appendChild(mkIcon(p)));
+  PROJECTS.forEach(p=>{
+    const ic=mkIc(p);
+    ic.addEventListener('dblclick',()=>{openProject(p);clearDT(p.id);hidePrev();});
+    ic.addEventListener('mouseenter',()=>{
+      ic.classList.add('pulse','counting');showPrev(p);
+      DTIMERS[p.id]=setTimeout(()=>{WINS[p.id]?focusW(p.id):openProject(p);ic.classList.remove('counting');hidePrev();},30000);
+    });
+    ic.addEventListener('mouseleave',()=>{clearDT(p.id);ic.classList.remove('pulse','counting');hidePrev();});
+    wrap.appendChild(ic);
+  });
   desk.appendChild(wrap);
+
+  const pw=document.createElement('div');pw.id='papelera-wrap';
+  const pic=mkIc({id:'papelera',em:'🗑',fc:'#2a1818',ft:'#201010',name:'Papelera'});
+  pic.addEventListener('dblclick',openPapelera);
+  pic.addEventListener('mouseenter',()=>{pic.classList.add('pulse','counting');DTIMERS.papelera=setTimeout(()=>{openPapelera();pic.classList.remove('counting');},30000);});
+  pic.addEventListener('mouseleave',()=>{clearDT('papelera');pic.classList.remove('pulse','counting');});
+  pw.appendChild(pic);desk.appendChild(pw);
 }
 
-function clearT(id){if(TIMERS[id]){clearTimeout(TIMERS[id]);delete TIMERS[id];}}
-
-/* ─── HOVER PREVIEW + WALLPAPER ─── */
-let prevHideTO=null;
-
-function showPrev(p){
-  clearTimeout(prevHideTO);
-  const hp=document.getElementById('hp');
-  const wpov=document.getElementById('wp-ov');
-  if(!hp||!wpov)return;
-
-  /* size */
-  hp.style.width=p.pw+'px';
-  hp.style.height=p.ph+'px';
-
-  /* visual — layered backgrounds */
-  hp.style.background=p.prevBg+(p.prevExtra?','+p.prevExtra:'');
-
-  /* label */
-  hp.querySelector('.hp-fname').textContent=p.name;
-  hp.querySelector('.hp-ftype').textContent=p.type;
-
-  /* random position — avoid icon column (left 95px) + taskbar (bottom 38px) */
-  const dW=document.getElementById('desktop').offsetWidth;
-  const dH=document.getElementById('desktop').offsetHeight;
-  const pad=18;
-  const minX=100, maxX=dW-p.pw-pad;
-  const minY=pad,  maxY=dH-p.ph-pad;
-  hp.style.left=Math.max(minX,minX+Math.random()*(maxX-minX))+'px';
-  hp.style.top= Math.max(minY,minY+Math.random()*(maxY-minY))+'px';
-
-  /* show */
-  hp.classList.add('vis');
-
-  /* wallpaper */
-  wpov.style.background=p.wpBg;
-  wpov.classList.add('vis');
+/* ── Tab switch ── */
+function swTab(btn,id,tab){
+  const win=document.getElementById('w-'+id);if(!win)return;
+  win.querySelectorAll('.win-tab').forEach(b=>b.classList.remove('on'));btn.classList.add('on');
+  win.querySelectorAll('.win-body').forEach(b=>{b.style.display=b.dataset.tab===tab?'':'none';});
 }
+function toggleSub(el){el.classList.toggle('open');}
 
-function hidePrev(){
-  const hp=document.getElementById('hp');
-  const wpov=document.getElementById('wp-ov');
-  if(hp)hp.classList.remove('vis');
-  if(wpov)wpov.classList.remove('vis');
+/* ── Build HTML ── */
+function tabBar(id){
+  return`<div class="win-tabs">
+    <button class="win-tab on" onclick="swTab(this,'${id}','main')">Proyecto</button>
+    <button class="win-tab" onclick="swTab(this,'${id}','extra')">Extra</button>
+  </div>`;
 }
-function buildProject(p){
-  return`<div class="win-bar">
-    <button class="wbtn cl" onclick="closeW('${p.id}')"></button>
-    <button class="wbtn mn" onclick="minW('${p.id}')"></button>
-    <button class="wbtn mx" onclick="maxW('${p.id}')"></button>
-    <div class="win-title">${p.name} — ${p.year}</div>
-  </div>
-  <div class="win-body">
-    <div class="p-type">${p.type}</div>
-    <div class="p-name">${p.name}</div>
-    <div class="p-year">${p.year}</div>
-    <div class="p-media"><div class="p-media-inner"><span>▶</span>[ material audiovisual ]<br>insertar video / imágenes aquí</div></div>
+function extraBody(p){
+  return p.extra&&p.extra.trim()
+    ?`<div class="extra-content">${p.extra.replace(/\n/g,'<br>')}</div>`
+    :`<div class="extra-placeholder">[ espacio para reflexiones, links y material complementario ]<br><br>Próximamente.</div>`;
+}
+function projContent(p){
+  return`<div class="p-type">${p.type}</div>
+    <div class="p-name">${p.name}</div><div class="p-year">${p.year}</div>
+    <div class="p-media"><div class="p-media-inner"><span>▶</span>[ imagen o video del proyecto ]</div></div>
     <div class="p-desc">${p.desc}</div>
     <div class="p-loc">📍 ${p.loc}</div>
-    <div class="p-tags">${p.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
-  </div>
-  <div class="rh"></div>`;
+    <div class="p-tags">${p.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>`;
+}
+function colabsContent(){
+  return COLABS.map(c=>`<div class="sub-proj" onclick="toggleSub(this)">
+    <div class="sub-header"><span class="sub-em">${c.em}</span>
+      <div class="sub-info"><div class="sub-name">${c.name}</div><div class="sub-meta">${c.year}</div></div>
+      <span class="sub-arrow">▼</span></div>
+    <div class="sub-body">${c.desc}</div>
+  </div>`).join('');
 }
 
-/* ─── BUILD BIO WINDOW ─── */
+function buildProject(p){
+  return`<div class="win-bar"><button class="wbtn cl" onclick="closeW('${p.id}')"></button>
+    <button class="wbtn mn" onclick="minW('${p.id}')"></button>
+    <button class="wbtn mx" onclick="maxW('${p.id}')"></button>
+    <div class="win-title">${p.name} — ${p.year}</div></div>
+    ${tabBar(p.id)}
+    <div class="win-body" data-tab="main">${projContent(p)}</div>
+    <div class="win-body" data-tab="extra" style="display:none">${extraBody(p)}</div>
+    <div class="rh"></div>`;
+}
+function buildColabs(){
+  return`<div class="win-bar"><button class="wbtn cl" onclick="closeW('colaboraciones')"></button>
+    <button class="wbtn mn" onclick="minW('colaboraciones')"></button>
+    <button class="wbtn mx" onclick="maxW('colaboraciones')"></button>
+    <div class="win-title">Colaboraciones</div></div>
+    <div class="win-tabs">
+      <button class="win-tab on" onclick="swTab(this,'colaboraciones','main')">Proyectos</button>
+      <button class="win-tab" onclick="swTab(this,'colaboraciones','extra')">Extra</button>
+    </div>
+    <div class="win-body" data-tab="main">${colabsContent()}</div>
+    <div class="win-body" data-tab="extra" style="display:none">
+      <div class="extra-placeholder">[ reflexiones y material extra sobre colaboraciones ]<br><br>Próximamente.</div>
+    </div><div class="rh"></div>`;
+}
+function buildPapelera(){
+  return`<div class="win-bar"><button class="wbtn cl" onclick="closeW('papelera')"></button>
+    <button class="wbtn mn" onclick="minW('papelera')"></button>
+    <div class="win-title">🗑 Papelera de reciclaje</div></div>
+    <div class="win-body">
+      <div class="papelera-note">Este proyecto no pudo realizarse.<br>Razones políticas ligadas al genocidio en Gaza.</div>
+      <div class="papelera-proj">
+        <div class="p-type">${TOPOLOGIA.type}</div>
+        <div class="p-name">${TOPOLOGIA.name}</div>
+        <div class="p-year">${TOPOLOGIA.year}</div>
+        <div class="p-desc" style="margin-top:10px">${TOPOLOGIA.desc}</div>
+        <div class="p-loc" style="margin-top:10px">📍 ${TOPOLOGIA.loc}</div>
+      </div>
+    </div><div class="rh"></div>`;
+}
 function buildBio(){
-  return`<div class="win-bar">
-    <button class="wbtn cl" onclick="closeW('bio')"></button>
+  return`<div class="win-bar"><button class="wbtn cl" onclick="closeW('bio')"></button>
     <button class="wbtn mn" onclick="minW('bio')"></button>
     <button class="wbtn mx" onclick="maxW('bio')"></button>
-    <div class="win-title">about.txt — Martín Fernández Navarro</div>
-  </div>
-  <div class="win-body">
-    <div class="bio-name">Martín Fernández Navarro</div>
-    <div class="bio-sub">Artista visual · performer · Montevideo, Uruguay</div>
-    <p class="bio-p">Su práctica se desarrolla a partir de metodologías de investigación basadas en las artes, combinando experiencia personal, análisis teórico y experimentación material para la creación de dispositivos escénicos y espaciales.</p>
-    <p class="bio-p">Sus proyectos exploran críticamente las transformaciones contemporáneas del trabajo, la virtualidad y la aceleración tecnológica, prestando especial atención a la progresiva <span class="bio-hl">desaparición o desplazamiento del cuerpo en entornos mediados.</span></p>
-    <p class="bio-p">El eje que atraviesa su obra: <span class="bio-hl">la pantalla como superficie performativa.</span> La interfaz como entorno donde sucede la obra, donde el cuerpo se transforma en imagen, donde la naturaleza deviene sustituto artificial.</p>
-    <p class="bio-p">En paralelo investiga imaginarios de futuros próximos a partir de los rituales posmodernos y las tensiones entre naturaleza y tecnología. No trabaja desde nostalgia ecológica clásica: el problema no es "perdimos la naturaleza", sino <span class="bio-hl">ya no sabemos existir fuera de los sistemas artificiales que generaron esa pérdida.</span></p>
-    <div class="bio-foot">Obras expuestas en Uruguay · Brasil · México · España<br>Maestría en Artes — Madrid, España<br>Próximas inauguraciones: Goes (abr 2026) · García Uriburu (may 2026)<br><br>
-    contacto: <a class="bio-link" href="mailto:contacto@martinfernandeznavarro.com">contacto@martinfernandeznavarro.com</a></div>
-  </div>
-  <div class="rh"></div>`;
+    <div class="win-title">about.txt — Martín Fernández Navarro</div></div>
+    <div class="win-body">
+      <div class="bio-name">Martín Fernández Navarro</div>
+      <div class="bio-sub">Artista visual · performer · Montevideo / Madrid</div>
+      <p class="bio-p">Artista e investigador radicado entre Montevideo y Madrid. Su práctica se sitúa en el cruce entre cuerpo, tecnología e imagen, desarrollando proyectos que exploran sistemas artificiales de sostén, repetición y desgaste.</p>
+      <p class="bio-p">Su investigación se despliega en formatos performáticos, expositivos y de videoperformance, con interés en estados de intensidad sostenida, acciones repetitivas y <span class="bio-hl">cuerpos llevados al límite o atravesados por dinámicas de automatización.</span></p>
+      <p class="bio-p">El eje conceptual que atraviesa su obra: <span class="bio-hl">la pantalla como superficie performativa.</span></p>
+      <div class="bio-foot">Obras expuestas en Uruguay · Brasil · México · España<br>
+        <a class="bio-link" href="https://youtu.be/s8H9qwl3kbM" target="_blank">▶ Video de presentación</a>
+        &nbsp;&nbsp;&nbsp;<a class="bio-link" href="mailto:martin.zip.rar@gmail.com">✉ martin.zip.rar@gmail.com</a>
+      </div>
+    </div><div class="rh"></div>`;
 }
 
-/* ─── OPEN WINDOW ─── */
-function mkWin(id,html,w,h,r,t){
+/* ── Open windows ── */
+function mkWin(id,html,w,h,rx,ry){
   if(WINS[id]){focusW(id);return;}
-  const el=document.createElement('div');
-  el.className='win';el.id='w-'+id;
-  el.style.width=w+'px';el.style.height=h+'px';
-  if(r!==undefined){el.style.right=r+'px';el.style.top=t+'px';}
-  else{el.style.left=(100+Math.random()*180)+'px';el.style.top=(50+Math.random()*100)+'px';}
-  el.style.zIndex=++wZ;
-  el.innerHTML=html;
+  const el=document.createElement('div');el.className='win';el.id='w-'+id;el.innerHTML=html;
+  el.style.width=w+'px';el.style.height=h+'px';el.style.zIndex=++wZ;
+  if(rx!==undefined){el.style.right=rx+'px';el.style.top=ry+'px';}
+  else{el.style.left=(100+Math.random()*160)+'px';el.style.top=(45+Math.random()*90)+'px';}
   document.getElementById('desktop').appendChild(el);
-  WINS[id]=el;
-  drag(el);resize(el);
-  tbAdd(id);focusW(id);
+  WINS[id]=el;drag(el);resize(el);tbAdd(id);focusW(id);
 }
-
 function openProject(p){
-  mkWin(p.id,buildProject(p),500,430);
-  schedulePhotos(p);
+  if(p.id==='colaboraciones'){mkWin('colaboraciones',buildColabs(),520,460);schedulePhotos(p);return;}
+  mkWin(p.id,buildProject(p),500,430);schedulePhotos(p);
 }
-function openBio(){mkWin('bio',buildBio(),520,440);}
+function openPapelera(){mkWin('papelera',buildPapelera(),460,340);}
+function openBio(){mkWin('bio',buildBio(),520,430);}
 
-/* ─── PHOTO CASCADE ─── */
+/* ── Photo cascade ── */
 function schedulePhotos(p){
-  const photos=PHOTO_DATA[p.id];
-  if(!photos)return;
-  if(PHOTO_TIMERS[p.id]){PHOTO_TIMERS[p.id].forEach(clearTimeout);}
-  PHOTO_TIMERS[p.id]=photos.map((photo,i)=>
-    setTimeout(()=>{if(WINS[p.id])openPhotoWin(p,photo,i);},10000*(i+1))
-  );
+  const photos=PHOTO_DATA[p.id];if(!photos)return;
+  if(PHOTO_TIMERS[p.id])PHOTO_TIMERS[p.id].forEach(clearTimeout);
+  PHOTO_TIMERS[p.id]=photos.map((ph,i)=>setTimeout(()=>{if(WINS[p.id])openPhotoWin(p,ph,i);},10000*(i+1)));
 }
-
 function openPhotoWin(p,photo,idx){
-  const winId=p.id+'-ph'+idx;
-  if(WINS[winId])return;
+  const wid=p.id+'-ph'+idx;if(WINS[wid])return;
   const desk=document.getElementById('desktop');
-  const dW=desk.offsetWidth, dH=desk.offsetHeight;
-  const pad=14, minX=104;
-  const x=Math.max(minX,minX+Math.random()*(dW-photo.w-pad-minX));
-  const y=Math.max(pad,pad+Math.random()*(dH-photo.h-pad*2));
-  const el=document.createElement('div');
-  el.className='win photo-win';
-  el.id='w-'+winId;
+  const dW=desk.offsetWidth,dH=desk.offsetHeight;
+  const x=Math.max(104,104+Math.random()*(dW-photo.w-18-104));
+  const y=Math.max(14,14+Math.random()*(dH-photo.h-28));
+  const el=document.createElement('div');el.className='win photo-win';el.id='w-'+wid;
   el.style.cssText=`width:${photo.w}px;height:${photo.h+22}px;left:${x}px;top:${y}px;z-index:${++wZ};`;
-  el.innerHTML=`
-    <div class="win-bar" style="height:22px;padding:0 5px;">
-      <button class="wbtn cl" onclick="closeW('${winId}')"></button>
-      <div class="win-title" style="font-size:8.5px;opacity:.5;">${p.em} ${photo.label}</div>
-    </div>
-    <div class="photo-body" style="background:${photo.bg};">
-      <div class="ph-idx">${idx+1} / 7</div>
-    </div>
-    <div class="rh"></div>`;
-  desk.appendChild(el);
-  WINS[winId]=el;
-  drag(el);
-  resize(el);
-  focusW(winId);
-}
-
-/* ─── WEATHER ─── */
-function openWeather(){
-  if(WINS['wx']){focusW('wx');return;}
-  const now=new Date();
-  const icons=['☁️','🌦','🌧','⛅','🌤','🌩'];
-  const descs=['nublado · humedad 76%','lluvias dispersas · 73%','parcialmente nublado · 70%','cielo cubierto · 82%','tormenta eléctrica · 68%'];
-  const temps=[17,18,19,16,20,15];
-  const i=now.getHours()%icons.length;
-  const html=`<div class="win-bar">
-    <button class="wbtn cl" onclick="closeW('wx')"></button>
-    <button class="wbtn mn" onclick="minW('wx')"></button>
-    <div class="win-title">clima_ahora.exe</div>
+  el.innerHTML=`<div class="win-bar" style="height:22px;padding:0 5px;">
+    <button class="wbtn cl" onclick="closeW('${wid}')"></button>
+    <div class="win-title" style="font-size:8.5px;opacity:.5;">${p.em} ${photo.label}</div>
   </div>
-  <div class="win-body">
-    <div class="wx-wrap">
-      <div class="wx-icon">${icons[i]}</div>
-      <div class="wx-temp">${temps[i]}°C</div>
-      <div class="wx-city">Montevideo · UY</div>
-      <div class="wx-desc">${descs[i]}<br>viento 14 km/h S<br>${now.toLocaleTimeString('es-UY',{hour:'2-digit',minute:'2-digit'})}</div>
-    </div>
-  </div>`;
-  mkWin('wx',html,195,200,14,55);
+  <div class="photo-body" style="background:${photo.bg};"><div class="ph-idx">${idx+1} / 7</div></div>
+  <div class="rh"></div>`;
+  desk.appendChild(el);WINS[wid]=el;drag(el);resize(el);focusW(wid);
 }
 
-/* ─── CALCULATOR ─── */
-const CKEYS=[['C','±','%','÷'],['7','8','9','×'],['4','5','6','−'],['1','2','3','+'],['0','0','.',  '=']];
-
-function openCalc(){
-  if(WINS['calc']){focusW('calc');return;}
-  const rows=CKEYS.map(row=>row.map((k,i)=>{
-    const sp=(row==='0'&&i===1)?'span2':'';
-    const cls=k==='='?'cbtn eq op':(['÷','×','−','+','C','±','%'].includes(k)?'cbtn op':'cbtn');
-    if(row===CKEYS[4]&&i===1)return'';
-    return`<button class="${cls} ${sp}" data-k="${k}" onclick="cInput('${k}')">${k}</button>`;
-  }).join('')).join('');
-  const html=`<div class="win-bar">
-    <button class="wbtn cl" onclick="closeW('calc')"></button>
-    <button class="wbtn mn" onclick="minW('calc')"></button>
-    <div class="win-title">calculadora.exe</div>
-  </div>
-  <div class="win-body" style="padding:10px">
-    <div class="calc-sub" id="c-sub"></div>
-    <div class="calc-disp" id="c-disp">0</div>
-    <div class="calc-grid">
-      ${CKEYS.map(row=>row.map(k=>{
-        const sp=(k==='0')?'span2':'';
-        const cl=k==='='?'cbtn eq':(['÷','×','−','+','C','±','%'].includes(k)?'cbtn op':'cbtn');
-        return`<button class="${cl} ${sp}" onclick="cInput('${k}')">${k}</button>`;
-      }).join('')).join('')}
-    </div>
-  </div>`;
-  mkWin('calc',html,210,310,14,260);
-}
-
-let cE='',cR=false;
-function cInput(k){
-  const d=document.getElementById('c-disp');
-  const s=document.getElementById('c-sub');
-  if(!d)return;
-  if(k==='C'){cE='';calcDisp='0';cR=false;}
-  else if(k==='±'){calcDisp=calcDisp.startsWith('-')?calcDisp.slice(1):'-'+calcDisp;}
-  else if(k==='%'){calcDisp=String(parseFloat(calcDisp)/100);}
-  else if(k==='='){
-    if(cE){
-      try{
-        const expr=cE.replace('×','*').replace('÷','/').replace('−','-');
-        const res=Function('"use strict";return('+expr+calcDisp+')')();
-        if(s)s.textContent=cE+calcDisp+'=';
-        calcDisp=String(Math.round(res*1e10)/1e10);
-        cE='';cR=true;
-      }catch{calcDisp='error';cE='';}
-    }
-  }else if(['÷','×','−','+'].includes(k)){
-    cE=calcDisp+k;calcDisp='0';cR=false;
-    if(s)s.textContent=cE;
-  }else{
-    if(cR){calcDisp=k;cR=false;}
-    else calcDisp=calcDisp==='0'?k:calcDisp+k;
-  }
-  d.textContent=calcDisp.slice(-12);
-}
-
-/* ─── WINDOW CONTROLS ─── */
+/* ── Window controls ── */
 function closeW(id){
   if(WINS[id]){WINS[id].remove();delete WINS[id];tbRm(id);}
-  /* if it's a main project window, kill its photo cascade */
   if(PHOTO_DATA[id]){
     if(PHOTO_TIMERS[id]){PHOTO_TIMERS[id].forEach(clearTimeout);delete PHOTO_TIMERS[id];}
     [0,1,2,3,4,5,6].forEach(i=>closeW(id+'-ph'+i));
   }
 }
 function minW(id){
-  const w=WINS[id];if(!w)return;
-  w.classList.toggle('hidden');
-  const b=document.getElementById('tb-'+id);
-  if(b)b.classList.toggle('on',!w.classList.contains('hidden'));
+  const w=WINS[id];if(!w)return;w.classList.toggle('hidden');
+  const b=document.getElementById('tb-'+id);if(b)b.classList.toggle('on',!w.classList.contains('hidden'));
 }
 function maxW(id){const w=WINS[id];if(w)w.classList.toggle('maxed');}
 function focusW(id){
-  const w=WINS[id];if(!w)return;
-  w.style.zIndex=++wZ;
+  const w=WINS[id];if(!w)return;w.style.zIndex=++wZ;
   document.querySelectorAll('.tb-wbtn').forEach(b=>b.classList.remove('on'));
   const b=document.getElementById('tb-'+id);if(b)b.classList.add('on');
 }
 
-/* ─── TASKBAR ─── */
+/* ── Taskbar ── */
 function tbAdd(id){
-  const tbw=document.getElementById('tb-wins');
-  const proj=PROJECTS.find(p=>p.id===id);
-  const label=id==='bio'?'about.txt':id==='wx'?'clima_ahora.exe':id==='calc'?'calculadora.exe':(proj?proj.short:id);
-  const b=document.createElement('button');
-  b.className='tb-wbtn on';b.id='tb-'+id;
-  b.textContent=label;
-  b.onclick=()=>{
-    const w=WINS[id];if(!w)return;
+  const p=PROJECTS.find(p=>p.id===id);
+  const L={'bio':'about.txt','wx':'clima.exe','calc':'calc.exe','papelera':'🗑 Papelera'};
+  const b=document.createElement('button');b.className='tb-wbtn on';b.id='tb-'+id;
+  b.textContent=L[id]||(p?p.short:id);
+  b.onclick=()=>{const w=WINS[id];if(!w)return;
     if(w.classList.contains('hidden')){w.classList.remove('hidden');focusW(id);}
     else{w.classList.add('hidden');b.classList.remove('on');}
   };
-  tbw.appendChild(b);
+  document.getElementById('tb-wins').appendChild(b);
 }
 function tbRm(id){const b=document.getElementById('tb-'+id);if(b)b.remove();}
 
-/* ─── DRAG ─── */
+/* ── Drag ── */
 let dragging=null,dx=0,dy=0,ox=0,oy=0;
 function drag(win){
   const bar=win.querySelector('.win-bar');
   bar.addEventListener('mousedown',e=>{
     if(e.target.classList.contains('wbtn'))return;
-    dragging=win;
-    dx=e.clientX;dy=e.clientY;
+    dragging=win;dx=e.clientX;dy=e.clientY;
     ox=parseInt(win.style.left)||win.getBoundingClientRect().left;
     oy=parseInt(win.style.top)||win.getBoundingClientRect().top;
-    win.style.left=ox+'px';win.style.top=oy+'px';
-    win.style.right='';
-    focusW(win.id.replace('w-',''));
-    e.preventDefault();
+    win.style.left=ox+'px';win.style.top=oy+'px';win.style.right='';
+    focusW(win.id.replace('w-',''));e.preventDefault();
   });
   win.addEventListener('mousedown',()=>focusW(win.id.replace('w-','')));
 }
-document.addEventListener('mousemove',e=>{
-  if(!dragging)return;
-  const nx=ox+(e.clientX-dx);
-  const ny=Math.max(0,oy+(e.clientY-dy));
-  dragging.style.left=nx+'px';
-  dragging.style.top=ny+'px';
-});
+document.addEventListener('mousemove',e=>{if(!dragging)return;dragging.style.left=(ox+e.clientX-dx)+'px';dragging.style.top=Math.max(0,oy+e.clientY-dy)+'px';});
 document.addEventListener('mouseup',()=>{dragging=null;});
 
-/* ─── RESIZE ─── */
+/* ── Resize ── */
 let resizing=null,rsx=0,rsy=0,rsw=0,rsh=0;
 function resize(win){
   const rh=win.querySelector('.rh');if(!rh)return;
-  rh.addEventListener('mousedown',e=>{
-    resizing=win;rsx=e.clientX;rsy=e.clientY;
-    rsw=win.offsetWidth;rsh=win.offsetHeight;
-    e.preventDefault();e.stopPropagation();
-  });
+  rh.addEventListener('mousedown',e=>{resizing=win;rsx=e.clientX;rsy=e.clientY;rsw=win.offsetWidth;rsh=win.offsetHeight;e.preventDefault();e.stopPropagation();});
 }
-document.addEventListener('mousemove',e=>{
-  if(!resizing)return;
-  resizing.style.width=Math.max(320,rsw+(e.clientX-rsx))+'px';
-  resizing.style.height=Math.max(180,rsh+(e.clientY-rsy))+'px';
-});
+document.addEventListener('mousemove',e=>{if(!resizing)return;resizing.style.width=Math.max(320,rsw+(e.clientX-rsx))+'px';resizing.style.height=Math.max(180,rsh+(e.clientY-rsy))+'px';});
 document.addEventListener('mouseup',()=>{resizing=null;});
 
-/* ─── CONTEXT MENU ─── */
+/* ── Weather ── */
+function openWeather(){
+  if(WINS['wx']){focusW('wx');return;}
+  const now=new Date(),icons=['☁️','🌦','🌧','⛅','🌤','🌩'],descs=['nublado · 76%','lluvias dispersas · 73%','parcialmente nublado · 70%','cielo cubierto · 82%','tormenta · 68%'],temps=[17,18,19,16,20,15],i=now.getHours()%icons.length;
+  mkWin('wx',`<div class="win-bar"><button class="wbtn cl" onclick="closeW('wx')"></button><button class="wbtn mn" onclick="minW('wx')"></button><div class="win-title">clima_ahora.exe</div></div>
+    <div class="win-body"><div class="wx-wrap"><div class="wx-icon">${icons[i]}</div><div class="wx-temp">${temps[i]}°C</div>
+    <div class="wx-city">Montevideo · UY</div><div class="wx-desc">${descs[i]}<br>viento 14 km/h S<br>${now.toLocaleTimeString('es-UY',{hour:'2-digit',minute:'2-digit'})}</div></div></div>`,195,200,14,55);
+}
+
+/* ── Calculator ── */
+const CKEYS=[['C','±','%','÷'],['7','8','9','×'],['4','5','6','−'],['1','2','3','+'],['0','0','.','=']];
+function openCalc(){
+  if(WINS['calc']){focusW('calc');return;}
+  mkWin('calc',`<div class="win-bar"><button class="wbtn cl" onclick="closeW('calc')"></button><button class="wbtn mn" onclick="minW('calc')"></button><div class="win-title">calculadora.exe</div></div>
+    <div class="win-body" style="padding:10px"><div class="calc-sub" id="c-sub"></div>
+    <div class="calc-disp" id="c-disp">0</div><div class="calc-grid">
+    ${CKEYS.map(r=>r.map(k=>`<button class="cbtn ${k==='='?'eq ':['÷','×','−','+','C','±','%'].includes(k)?'op ':''} ${k==='0'?'span2':''}" onclick="cInput('${k}')">${k}</button>`).join('')).join('')}
+    </div></div>`,210,310,14,260);
+}
+function cInput(k){
+  const d=document.getElementById('c-disp'),s=document.getElementById('c-sub');if(!d)return;
+  if(k==='C'){calcDisp='0';cE='';cR=false;}
+  else if(k==='±'){calcDisp=calcDisp.startsWith('-')?calcDisp.slice(1):'-'+calcDisp;}
+  else if(k==='%'){calcDisp=String(parseFloat(calcDisp)/100);}
+  else if(k==='='){if(cE){try{const r=Function('"use strict";return('+cE.replace('×','*').replace('÷','/').replace('−','-')+calcDisp+')')();
+    if(s)s.textContent=cE+calcDisp+'=';calcDisp=String(Math.round(r*1e10)/1e10);cE='';cR=true;}catch{calcDisp='error';cE='';}}}
+  else if(['÷','×','−','+'].includes(k)){cE=calcDisp+k;calcDisp='0';cR=false;if(s)s.textContent=cE;}
+  else{if(cR){calcDisp=k;cR=false;}else calcDisp=calcDisp==='0'?k:calcDisp+k;}
+  d.textContent=calcDisp.slice(-12);
+}
+
+/* ── Context menu ── */
 function showCtx(e){
   e.preventDefault();closeCtx();
-  const m=document.createElement('div');m.id='ctx';
-  m.style.left=e.clientX+'px';m.style.top=e.clientY+'px';
-  m.innerHTML=`
-    <div class="ctx-i" onclick="openBio();closeCtx()">Acerca del artista</div>
+  const m=document.createElement('div');m.id='ctx';m.style.left=e.clientX+'px';m.style.top=e.clientY+'px';
+  m.innerHTML=`<div class="ctx-i" onclick="openBio();closeCtx()">Acerca del artista</div>
     <div class="ctx-d"></div>
     <div class="ctx-i" onclick="openWeather();closeCtx()">Abrir clima</div>
     <div class="ctx-i" onclick="openCalc();closeCtx()">Abrir calculadora</div>
     <div class="ctx-d"></div>
-    <div class="ctx-i" onclick="notif('La pantalla como superficie performativa.');closeCtx()">Acerca de esta web</div>`;
+    <div class="ctx-i" onclick="openPapelera();closeCtx()">Abrir papelera</div>`;
   document.body.appendChild(m);
   setTimeout(()=>document.addEventListener('click',closeCtx,{once:true}),0);
 }
 function closeCtx(){const m=document.getElementById('ctx');if(m)m.remove();}
 
-/* ─── NOTIFICATIONS ─── */
-const MSGS=[
-  'La pantalla como superficie performativa.',
-  'Jardín Imposible inaugura en abril 2026.',
-  'Sistema operativo: cuerpo + interfaz.',
-  'CIGOMÁTICO: músculo en proceso.',
-  '[ señal intermitente ]',
-  'Depósito Esmeralda — mayo 2026.',
-  'Hacé doble clic sobre una carpeta para abrir.',
-  'O esperá 30 segundos sobre un ícono.',
-];
-let nIdx=0;
-function notif(msg){
-  const n=document.createElement('div');
-  n.className='notif';n.textContent=msg||MSGS[nIdx++%MSGS.length];
+/* ── Desktop notifications ── */
+const DMSGS=['La pantalla como superficie performativa.','Después del Jardín inaugura en 2026.',
+  'Sistema operativo: cuerpo + interfaz.','Depósito Cero — mayo 2026, Maldonado.',
+  'Hacé doble clic sobre una carpeta.','[ señal intermitente ]','O esperá 30 seg. sobre un ícono.'];
+let dnIdx=0;
+function dNotif(msg){
+  const n=document.createElement('div');n.className='notif-d';n.textContent=msg||DMSGS[dnIdx++%DMSGS.length];
   document.body.appendChild(n);
   setTimeout(()=>{n.style.animation='nout .3s ease forwards';setTimeout(()=>n.remove(),300);},4500);
 }
 
-/* ─── RANDOM EVENTS ─── */
-(function schedule(){
-  setTimeout(()=>notif('Bienvenido/a al escritorio de Martín Fernández Navarro.'),1800);
-  setTimeout(()=>notif('Hacé doble clic o esperá 30 s. sobre una carpeta.'),5500);
-  setTimeout(()=>{notif('Conexión con servidor climático establecida.');setTimeout(openWeather,1600);},22000);
-  setTimeout(()=>{notif('calculadora.exe iniciada por el sistema.');setTimeout(openCalc,1200);},55000);
-  setInterval(()=>notif(),38000);
-  /* occasional glitch notif */
-  setInterval(()=>{if(Math.random()<.4)notif('[ '+Math.random().toString(36).substr(2,8)+'.exe ]');},90000);
-})();
+/* ════════════════════════════════════════════
+   MOBILE ENGINE
+════════════════════════════════════════════ */
+let mobPanelData=null;
 
-/* ─── INIT ─── */
-createWallpaper();
-renderIcons();
+function renderMobile(){
+  renderMobGrid();
+  renderMobDock();
+  scheduleMobNotifs();
+}
+
+function renderMobGrid(){
+  const grid=document.getElementById('mob-grid');if(!grid)return;
+  PROJECTS.forEach(p=>{
+    const app=mobApp(p.id,p.em,p.name,p.mobBg,()=>openMobPanel(p));
+    grid.appendChild(app);
+  });
+  const pap=mobApp('papelera','🗑','Papelera','linear-gradient(145deg,#2a1818,#3e2020)',()=>openMobPapelera());
+  grid.appendChild(pap);
+}
+
+function renderMobDock(){
+  const dock=document.getElementById('mob-dock');if(!dock)return;
+  const bio=mobApp('bio-dock','◻','about','linear-gradient(145deg,#1a2a20,#263a2c)',()=>openMobBio());
+  dock.appendChild(bio);
+}
+
+function mobApp(id,em,label,bg,fn){
+  const d=document.createElement('div');d.className='mob-app';
+  d.innerHTML=`<div class="mob-app-icon" style="background:${bg}">${em}</div>
+    <div class="mob-app-label">${label}</div>`;
+  d.addEventListener('click',fn);
+  return d;
+}
+
+/* ── Mobile panel ── */
+function openMobPanel(p){
+  mobPanelData=p;
+  const panel=document.getElementById('mob-panel');
+  const title=document.getElementById('mob-panel-title');
+  const body=document.getElementById('mob-panel-body');
+  if(!panel||!title||!body)return;
+
+  title.textContent=p.name+' — '+p.year;
+
+  let mainHTML,extraHTML;
+  if(p.id==='colaboraciones'){
+    mainHTML=colabsContent();
+    extraHTML=`<div class="extra-placeholder">[ reflexiones y material extra sobre colaboraciones ]<br><br>Próximamente.</div>`;
+  }else{
+    mainHTML=projContent(p);
+    extraHTML=p.extra&&p.extra.trim()
+      ?`<div class="extra-content">${p.extra.replace(/\n/g,'<br>')}</div>`
+      :`<div class="extra-placeholder">[ espacio para reflexiones, links y material complementario ]<br><br>Próximamente.</div>`;
+  }
+
+  body.innerHTML=`<div data-tab="main">${mainHTML}</div>
+    <div data-tab="extra" style="display:none">${extraHTML}</div>`;
+
+  /* reset tabs */
+  panel.querySelectorAll('.mob-tab').forEach((b,i)=>{b.classList.toggle('on',i===0);});
+
+  panel.classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function openMobPapelera(){
+  const panel=document.getElementById('mob-panel');
+  const title=document.getElementById('mob-panel-title');
+  const body=document.getElementById('mob-panel-body');
+  if(!panel||!title||!body)return;
+  title.textContent='🗑 Papelera de reciclaje';
+  body.innerHTML=`<div data-tab="main">
+    <div class="papelera-note">Este proyecto no pudo realizarse.<br>Razones políticas ligadas al genocidio en Gaza.</div>
+    <div class="papelera-proj">
+      <div class="p-type">${TOPOLOGIA.type}</div>
+      <div class="p-name">${TOPOLOGIA.name}</div>
+      <div class="p-year">${TOPOLOGIA.year}</div>
+      <div class="p-desc" style="margin-top:10px">${TOPOLOGIA.desc}</div>
+      <div class="p-loc" style="margin-top:10px">📍 ${TOPOLOGIA.loc}</div>
+    </div>
+  </div><div data-tab="extra" style="display:none"></div>`;
+  panel.querySelectorAll('.mob-tab').forEach((b,i)=>{b.classList.toggle('on',i===0);});
+  /* hide extra tab for papelera */
+  const tabs=panel.querySelectorAll('.mob-tab');if(tabs[1])tabs[1].style.display='none';
+  panel.classList.add('open');document.body.style.overflow='hidden';
+}
+
+function openMobBio(){
+  const panel=document.getElementById('mob-panel');
+  const title=document.getElementById('mob-panel-title');
+  const body=document.getElementById('mob-panel-body');
+  if(!panel||!title||!body)return;
+  title.textContent='Martín Fernández Navarro';
+  body.innerHTML=`<div data-tab="main">
+    <div class="bio-name">Martín Fernández Navarro</div>
+    <div class="bio-sub">Artista visual · performer · Montevideo / Madrid</div>
+    <p class="bio-p">Artista e investigador radicado entre Montevideo y Madrid. Su práctica se sitúa en el cruce entre cuerpo, tecnología e imagen, desarrollando proyectos que exploran sistemas artificiales de sostén, repetición y desgaste.</p>
+    <p class="bio-p">Su investigación se despliega en formatos performáticos, expositivos y de videoperformance, con interés en estados de intensidad sostenida, acciones repetitivas y <span class="bio-hl">cuerpos llevados al límite o atravesados por dinámicas de automatización.</span></p>
+    <p class="bio-p">El eje conceptual que atraviesa su obra: <span class="bio-hl">la pantalla como superficie performativa.</span></p>
+    <div class="bio-foot">Obras expuestas en Uruguay · Brasil · México · España<br>
+      <a class="bio-link" href="https://youtu.be/s8H9qwl3kbM" target="_blank">▶ Video de presentación</a><br>
+      <a class="bio-link" href="mailto:martin.zip.rar@gmail.com">✉ martin.zip.rar@gmail.com</a>
+    </div>
+  </div><div data-tab="extra" style="display:none"></div>`;
+  panel.querySelectorAll('.mob-tab').forEach((b,i)=>{b.classList.toggle('on',i===0);});
+  const tabs=panel.querySelectorAll('.mob-tab');if(tabs[1])tabs[1].style.display='none';
+  panel.classList.add('open');document.body.style.overflow='hidden';
+}
+
+function closeMobPanel(){
+  const panel=document.getElementById('mob-panel');
+  if(panel)panel.classList.remove('open');
+  document.body.style.overflow='';
+  /* restore extra tab */
+  panel.querySelectorAll('.mob-tab').forEach(b=>b.style.display='');
+}
+
+function mobSwTab(btn,tab){
+  const panel=document.getElementById('mob-panel');if(!panel)return;
+  panel.querySelectorAll('.mob-tab').forEach(b=>b.classList.remove('on'));btn.classList.add('on');
+  panel.querySelectorAll('#mob-panel-body [data-tab]').forEach(b=>{b.style.display=b.dataset.tab===tab?'':'none';});
+}
+
+/* ── Mobile notifications ── */
+function scheduleMobNotifs(){
+  MOB_NOTIFS.forEach(n=>{setTimeout(()=>showMobNotif(n),n.delay);});
+}
+
+function showMobNotif(n){
+  const zone=document.getElementById('mob-notif-zone');if(!zone)return;
+  const el=document.createElement('div');el.className='mob-notif';
+  el.innerHTML=`<div class="mob-notif-icon">${n.icon}</div>
+    <div class="mob-notif-body">
+      <div class="mob-notif-from">${n.from}</div>
+      <div class="mob-notif-text">${n.text}</div>
+    </div>
+    <div class="mob-notif-x" onclick="dismissMobNotif(this.parentElement)">✕</div>`;
+  zone.appendChild(el);
+  el.style.pointerEvents='all';
+  requestAnimationFrame(()=>requestAnimationFrame(()=>el.classList.add('show')));
+  setTimeout(()=>dismissMobNotif(el),6000);
+}
+
+function dismissMobNotif(el){
+  if(!el||el.classList.contains('hide'))return;
+  el.classList.remove('show');el.classList.add('hide');
+  setTimeout(()=>el.remove(),380);
+}
+
+/* ════════════════════════════════════════════
+   INIT
+════════════════════════════════════════════ */
+(function(){
+  if(!isMobile()){
+    /* Desktop */
+    createWallpaper();
+    renderDesktop();
+    setTimeout(()=>dNotif('Bienvenido/a al escritorio de Martín Fernández Navarro.'),1800);
+    setTimeout(()=>dNotif('Hacé doble clic o esperá 30 s. sobre una carpeta.'),5500);
+    setTimeout(()=>{dNotif('Conexión con servidor climático establecida.');setTimeout(openWeather,1600);},22000);
+    setTimeout(()=>{dNotif('calculadora.exe iniciada por el sistema.');setTimeout(openCalc,1200);},55000);
+    setInterval(()=>dNotif(),38000);
+  }else{
+    /* Mobile */
+    renderMobile();
+  }
+})();
 </script>
 </body>
 </html>
